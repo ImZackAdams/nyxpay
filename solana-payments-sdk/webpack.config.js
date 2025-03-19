@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.js',
@@ -26,8 +27,16 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js'],
+    fallback: {
+      buffer: require.resolve('buffer/')
+    }
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer']
+    })
+  ],
   externals: {
     '@solana/web3.js': 'solanaWeb3',
     'bn.js': 'BN'
