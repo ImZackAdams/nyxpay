@@ -1,31 +1,4 @@
-// TBALL Pay MVP Roadmap
-
-// 1. Setup Environment:
-//    - Install Rust, Solana CLI, Anchor, Node.js, React, and TailwindCSS.
-
-// 2. Build Escrow Smart Contract:
-//    - Anchor contract to hold TBALL payments, release upon delivery confirmation.
-
-// 3. Wallet Integration:
-//    - Use Solana Web3.js to connect Phantom Wallet and process payments.
-
-// 4. Basic Merchant Dashboard:
-//    - React app for merchants to list items (name, price, description).
-//    - Generate payment buttons/links for each item.
-//    - View transaction history and confirm deliveries.
-
-// 5. Payment Button Code:
-//    - JS snippet for merchants to copy-paste on their site.
-//    - Opens Phantom Wallet, processes TBALL payments.
-
-// 6. Testing & Deployment:
-//    - Test full payment flow on Solana Devnet.
-//    - Deploy MVP with manual item entry and copy-paste integration.
-
-// Future Enhancements:
-//    - API keys for dynamic item details.
-//    - Plugins for Shopify/WordPress.
-//    - Auto-generated checkout pages like Stripe.
-
-// Start by building the escrow smart contract and a basic dashboard for item listings and payments.
-
+Phase 1: Create the core SDK without UI components
+Phase 2: Build the token registry with several popular memecoins
+Phase 3: Develop merchant-specific features (API keys, webhooks)
+Phase 4: Create customizable UI components for different integration methods
