@@ -8,7 +8,7 @@ class TokenRegistry {
       this.tokens = {
         // Default tokens
         'TBALL': {
-          name: 'TeleportBall',
+          name: 'Tetherball',
           symbol: 'TBALL',
           mintAddress: 'CWnzqQVFaD7sKsZyh116viC48G7qLz8pa5WhFpBEg9wM',
           decimals: 9,
