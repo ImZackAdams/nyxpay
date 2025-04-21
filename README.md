@@ -1,37 +1,37 @@
-🏐 Solana Payments SDK
+# 🏐 Solana Payments SDK
+
 A lightweight JavaScript SDK to power custom token payments on the Solana blockchain. Easily connect Phantom, manage balances, and send SPL tokens (like $TBALL) from any browser app — no smart contracts or backend required.
 
-🚀 Features
-🔐 Phantom wallet integration (connect/disconnect)
+## 🚀 Features
 
-🪙 Send SPL tokens (e.g. TBALL) between wallets
+- 🔐 Phantom wallet integration (connect/disconnect)
+- 🪙 Send SPL tokens (e.g. TBALL) between wallets
+- 🧠 Token registry with built-in metadata
+- ✅ Input validation and transaction simulation
+- 🔄 Real-time balance fetching
+- 📦 Bundled for browser or module-based usage
 
-🧠 Token registry with built-in metadata
+## 📦 Installation
 
-✅ Input validation and transaction simulation
+### Option 1: Import UMD bundle in browser (no build step)
 
-🔄 Real-time balance fetching
-
-📦 Bundled for browser or module-based usage
-
-📦 Installation
-Option 1: Import UMD bundle in browser (no build step)
-html
-Copy
-Edit
+```html
 <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
 <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
 <script src="./dist/solana-payments-sdk.js"></script>
-Option 2: Install via npm
-bash
-Copy
-Edit
+```
+
+### Option 2: Install via npm
+
+```bash
 npm install solana-payments-sdk
-🧪 Example (Browser App)
-index.html
-html
-Copy
-Edit
+```
+
+## 🧪 Example (Browser App)
+
+### index.html
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,7 +44,6 @@ Edit
   <button id="connectWallet">Connect Wallet</button>
   <button id="sendPayment">Send 5 TBALL</button>
   <div id="statusMessage"></div>
-
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
   <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
   <script>
@@ -53,57 +52,48 @@ Edit
   <script src="./dist/solana-payments-sdk.js"></script>
   <script>
     const { PaymentProcessor, PhantomAdapter } = SolanaPaymentsSDK;
-
     const processor = new PaymentProcessor({ network: 'mainnet-beta' });
     processor.setWalletAdapter(new PhantomAdapter());
-
     document.getElementById('connectWallet').onclick = async () => {
       await processor.init();
       await processor.connectWallet();
       alert('Wallet connected!');
     };
-
     document.getElementById('sendPayment').onclick = async () => {
       const result = await processor.sendTokens({
         recipient: 'EnterRecipientPublicKeyHere',
         amount: 5,
         tokenMint: 'TBALL'
       });
-
       document.getElementById('statusMessage').innerHTML =
         `Payment sent! <a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;
     };
   </script>
 </body>
 </html>
-⚙️ API Overview
-PaymentProcessor(config)
-network: Solana cluster (e.g. 'mainnet-beta')
+```
 
-rpcEndpoint: Optional custom RPC endpoint
+## ⚙️ API Overview
 
-Methods
-init() – Initialize SDK and Solana connection
+### PaymentProcessor(config)
+- `network`: Solana cluster (e.g. 'mainnet-beta')
+- `rpcEndpoint`: Optional custom RPC endpoint
 
-setWalletAdapter(adapter) – Attach a wallet adapter
+#### Methods
+- `init()` – Initialize SDK and Solana connection
+- `setWalletAdapter(adapter)` – Attach a wallet adapter
+- `connectWallet()` – Prompt Phantom to connect
+- `disconnectWallet()` – Disconnect the wallet
+- `getTokenBalance(tokenSymbolOrMint)` – Get the wallet's token balance
+- `sendTokens({ recipient, amount, tokenMint })` – Send SPL tokens
 
-connectWallet() – Prompt Phantom to connect
-
-disconnectWallet() – Disconnect the wallet
-
-getTokenBalance(tokenSymbolOrMint) – Get the wallet’s token balance
-
-sendTokens({ recipient, amount, tokenMint }) – Send SPL tokens
-
-PhantomAdapter()
+### PhantomAdapter()
 Adapter for Phantom Wallet. Required for connecting and signing.
 
-TokenRegistry
+### TokenRegistry
 Manage supported tokens and metadata.
 
-js
-Copy
-Edit
+```javascript
 const registry = new TokenRegistry();
 registry.addToken({
   symbol: 'DOGE',
@@ -111,10 +101,11 @@ registry.addToken({
   decimals: 9,
   maxTransferAmount: 100000
 });
-📁 Project Structure
-pgsql
-Copy
-Edit
+```
+
+## 📁 Project Structure
+
+```
 solana-payments-sdk/
 ├── dist/                      # Bundled SDK (UMD)
 ├── examples/simple-payment/   # Full demo: index.html + app.js
@@ -127,29 +118,28 @@ solana-payments-sdk/
 │       └── validation.js
 ├── webpack.config.js
 └── package.json
-🛡️ Security & Best Practices
-Always simulate and confirm transactions before marking them complete.
+```
 
-Validate addresses with isValidSolanaAddress() before sending.
+## 🛡️ Security & Best Practices
 
-Never hardcode private keys or RPC endpoints client-side.
+- Always simulate and confirm transactions before marking them complete
+- Validate addresses with `isValidSolanaAddress()` before sending
+- Never hardcode private keys or RPC endpoints client-side
+- Always check balances and limits before sending transactions
 
-Always check balances and limits before sending transactions.
+## 🧠 TODOs & Roadmap
 
-🧠 TODOs & Roadmap
- Add support for TransferChecked instruction
+- [ ] Add support for TransferChecked instruction
+- [ ] Support other wallets (e.g. Solflare, Backpack)
+- [ ] React/Vue wrappers
+- [ ] Token swap & NFT utilities
+- [ ] Add TypeScript types
 
- Support other wallets (e.g. Solflare, Backpack)
+## 👨‍🍳 Created by Zack Adams
 
- React/Vue wrappers
-
- Token swap & NFT utilities
-
- Add TypeScript types
-
-👨‍🍳 Created by Zack Adams
 Built for memecoins, games, marketplaces, and crypto-native experiences.
 Let the blockchain be your backend.
 
-🧵 Feedback / Issues
+## 🧵 Feedback / Issues
+
 Open a GitHub issue or contact @tetherballcoin on Twitter.
