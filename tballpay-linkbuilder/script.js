@@ -24,6 +24,10 @@ document.getElementById('builderForm').addEventListener('submit', (e) => {
   
     embedTextarea.value = embedHTML;
     embedSection.classList.remove('hidden');
+  
+    // Show live preview of the button
+    const preview = document.getElementById('buttonPreview');
+    preview.innerHTML = embedHTML;
   });
   
   document.getElementById('copyButton').addEventListener('click', () => {
