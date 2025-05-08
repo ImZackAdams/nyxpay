@@ -3,11 +3,13 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Serve static files
-app.use(express.static('examples/checkout'));
-app.use('/dist', express.static('dist'));
+// ✅ Serve checkout page at explicit path
+app.use('/examples/checkout', express.static(path.join(__dirname, 'examples/checkout')));
 
-// API endpoint for Helius key
+// ✅ Serve SDK UMD bundle
+app.use('/dist', express.static(path.join(__dirname, 'dist')));
+
+// ✅ API endpoint
 app.get('/api/get-key', (req, res) => {
   res.json({ apiKey: process.env.HELIUS_KEY });
 });
