@@ -30,6 +30,29 @@
       <button id="copyButton">Copy to Clipboard</button>
     </div>
 
+    <div id="buttonEmbed" class="hidden">
+      <h2>🧩 Embed Checkout Button</h2>
+      <p>Paste this HTML where you want the payment button to appear:</p>
+      <textarea id="buttonCode" rows="5" readonly></textarea>
+      <button id="copyEmbed">Copy Embed Code</button>
+
+      <div id="buttonPreview" style="margin-top: 1rem;"></div>
+    </div>
+
+    <section id="about" style="margin-top: 3rem;">
+        <section id="about" style="margin-top: 3rem;">
+            <h2>📖 About TBALL Pay</h2>
+            <p>TBALL Pay is a fully client side utility for generating Solana payment links and HTML buttons. No servers, no databases, no external requests. Just static JavaScript running in the browser.</p>
+          
+            <p>The builder is deterministic and portable. It can be self hosted, run offline, or deployed via IPFS, GitHub Pages, or even from local files. Inputs are encoded into URLs or anchors. nothing is stored or transmitted.</p>
+          
+            <p>An internal SDK supports transaction creation, simulation, and confirmation using the Solana Web3.js library. Wallet adapters are injected at runtime. All RPC calls are made directly from the client to public Solana endpoints.</p>
+          
+            <p>No telemetry. No opaque backend. Just inspectable code that moves tokens.</p>
+          </section>
+          
+    </section>
+
     <footer>
       <p><a href="https://github.com/your-org/tball-pay-sdk" target="_blank">View SDK on GitHub</a></p>
     </footer>
