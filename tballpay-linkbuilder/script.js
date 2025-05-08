@@ -8,8 +8,11 @@ document.getElementById('builderForm').addEventListener('submit', (e) => {
     if (!label || !amount || !recipient) return;
 
 
-  //testing local
-  const baseUrl = 'https://tballcheckout-nwd9014tl-imzackadams-projects.vercel.app';
+//live
+
+
+    const baseUrl = 'https://tballcheckout.vercel.app';
+
 
   
 
