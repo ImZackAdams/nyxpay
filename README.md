@@ -142,4 +142,4 @@ Let the blockchain be your backend.
 
 ## 🧵 Feedback / Issues
 
-Open a GitHub issue or contact @tetherballcoin on Twitter.
+Open a GitHub issue or contact @hackingbaseball on Twitter.
