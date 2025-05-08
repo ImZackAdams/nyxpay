@@ -9,7 +9,8 @@ document.getElementById('builderForm').addEventListener('submit', (e) => {
 
 
   //testing local
-    const baseUrl = 'https://tballcheckout-pff9zgb4j-imzackadams-projects.vercel.app';
+  const baseUrl = 'https://tballcheckout-nwd9014tl-imzackadams-projects.vercel.app';
+
   
 
     const link = `${baseUrl}/?recipient=${recipient}&amount=${amount}&label=${label}`;
