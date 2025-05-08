@@ -5,14 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buy with TBALL</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f8f8f8; }
-    .card { background: white; padding: 30px; border-radius: 12px; max-width: 400px; margin: 0 auto; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-    h1 { font-size: 24px; margin-bottom: 10px; }
-    p { font-size: 18px; color: #444; }
-    button { padding: 12px 20px; font-size: 16px; background-color: #0279FF; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 20px; }
-    button:hover { background-color: #005dcc; }
-    #statusMessage { margin-top: 20px; font-weight: bold; }
-    a { color: #0279FF; }
+    body { 
+      font-family: sans-serif; 
+      text-align: center; 
+      padding: 40px; 
+      background: #0a0a0a; 
+      color: #f5f5f5;
+    }
+    
+    .card { 
+      background: #161616; 
+      padding: 30px; 
+      border-radius: 12px; 
+      max-width: 400px; 
+      margin: 0 auto; 
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4); 
+    }
+    
+    h1 { 
+      font-size: 24px; 
+      margin-bottom: 10px; 
+      color: #ffffff;
+    }
+    
+    p { 
+      font-size: 18px; 
+      color: #aaaaaa;
+    }
+    
+    button { 
+      padding: 12px 20px; 
+      font-size: 16px; 
+      background-color: #ff6b00; 
+      color: white; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      margin-top: 20px; 
+      transition: background-color 0.2s;
+    }
+    
+    button:hover { 
+      background-color: #e05a00; 
+    }
+    
+    #statusMessage { 
+      margin-top: 20px; 
+      font-weight: bold; 
+      color: #dddddd;
+    }
+    
+    a { 
+      color: #ff9c41; 
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: #ffbb80;
+    }
   </style>
 </head>
 <body>
@@ -22,7 +72,6 @@
     <button id="buyButton">Buy</button>
     <div id="statusMessage">Waiting for wallet...</div>
   </div>
-
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
   <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
   <script>window.BN = BN;</script>
@@ -31,43 +80,40 @@
     const { PaymentProcessor, PhantomAdapter } = TBallPaySDK;
     const sdk = new PaymentProcessor({ network: 'mainnet-beta' });
     sdk.setWalletAdapter(new PhantomAdapter());
-
     // Parse query parameters
     const urlParams = new URLSearchParams(window.location.search);
     const recipient = urlParams.get('recipient');
     const amount = parseFloat(urlParams.get('amount'));
     const label = urlParams.get('label') || 'Unnamed Item';
-
     document.getElementById('itemLabel').textContent = label;
     document.getElementById('priceText').textContent = `Pay ${amount} TBALL to complete your purchase`;
     document.getElementById('buyButton').textContent = `Buy ${label} for ${amount} TBALL`;
-
     async function buy() {
       const status = document.getElementById('statusMessage');
       try {
         if (!recipient || isNaN(amount)) {
           status.textContent = 'Missing or invalid recipient or amount.';
+          status.style.color = '#ff6b6b'; // Error color
           return;
         }
-
         status.textContent = 'Connecting wallet...';
+        status.style.color = '#dddddd'; // Reset color
         await sdk.init();
         await sdk.connectWallet();
-
         status.textContent = 'Sending payment...';
         const result = await sdk.sendTokens({
           recipient,
           amount,
           tokenMint: 'TBALL'
         });
-
         status.innerHTML = `✅ Payment sent!<br><a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;
+        status.style.color = '#ffbb80'; // Success color
       } catch (err) {
         console.error(err);
         status.textContent = `❌ Error: ${err.message}`;
+        status.style.color = '#ff6b6b'; // Error color
       }
     }
-
     document.getElementById('buyButton').onclick = buy;
   </script>
 </body>

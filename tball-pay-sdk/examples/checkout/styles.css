@@ -1,9 +1,60 @@
-body {
-    font-family: sans-serif;
-    background: #0a0a0a;
-    padding: 30px;
-    text-align: center;
+body { 
+    font-family: sans-serif; 
+    text-align: center; 
+    padding: 40px; 
+    background: #0a0a0a; 
     color: #f5f5f5;
+  }
+  
+  .card { 
+    background: #161616; 
+    padding: 30px; 
+    border-radius: 12px; 
+    max-width: 400px; 
+    margin: 0 auto; 
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4); 
+  }
+  
+  h1 { 
+    font-size: 24px; 
+    margin-bottom: 10px; 
+    color: #ffffff;
+  }
+  
+  p { 
+    font-size: 18px; 
+    color: #aaaaaa;
+  }
+  
+  button { 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    background-color: #ff6b00; 
+    color: white; 
+    border: none; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    margin-top: 20px; 
+    transition: background-color 0.2s;
+  }
+  
+  button:hover { 
+    background-color: #e05a00; 
+  }
+  
+  #statusMessage { 
+    margin-top: 20px; 
+    font-weight: bold; 
+    color: #dddddd;
+  }
+  
+  a { 
+    color: #ff9c41; 
+    transition: color 0.2s;
+  }
+  
+  a:hover {
+    color: #ffbb80;
   }
   
   .container {
@@ -15,16 +66,6 @@ body {
     box-shadow: 0 5px 20px rgba(0,0,0,0.4);
   }
   
-  h1 {
-    color: #ffffff;
-    font-size: 24px;
-  }
-  
-  p {
-    color: #aaaaaa;
-    margin-bottom: 20px;
-  }
-  
   label {
     display: block;
     text-align: left;
@@ -33,7 +74,7 @@ body {
     font-size: 14px;
   }
   
-  input, button {
+  input {
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -53,19 +94,6 @@ body {
   
   input::placeholder {
     color: #777777;
-  }
-  
-  button {
-    background: #ff6b00;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.2s;
-  }
-  
-  button:hover {
-    background: #e05a00;
   }
   
   .hidden {
@@ -90,6 +118,8 @@ body {
     padding: 12px;
     border: 1px solid #333;
     margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
   
   #copyButton {
@@ -103,14 +133,14 @@ body {
   
   footer {
     margin-top: 30px;
+    color: #777777;
   }
   
-  footer a {
-    color: #ff9c41;
-    text-decoration: none;
-  }
-  
-  footer a:hover {
-    text-decoration: underline;
+  /* Success and error states */
+  .success {
     color: #ffbb80;
+  }
+  
+  .error {
+    color: #ff6b6b;
   }
