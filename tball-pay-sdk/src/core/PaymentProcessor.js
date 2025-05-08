@@ -42,9 +42,7 @@ class PaymentProcessor {
       
       // Get RPC endpoint (from config or fetch from server)
       if (!this.config.rpcEndpoint) {
-        const response = await fetch('/api/get-key');
-        const data = await response.json();
-        this.config.rpcEndpoint = `https://rpc.helius.xyz/?api-key=${data.apiKey}`;
+        this.config.rpcEndpoint = `https://rpc.helius.xyz/?api-key=bbcc6a7a-9027-4cb3-a131-83844043ba33`;
       }
       
       // Initialize Solana connection

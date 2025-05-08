@@ -8,8 +8,13 @@ document.getElementById('builderForm').addEventListener('submit', (e) => {
     if (!label || !amount || !recipient) return;
 
 
-  //testing local
-    const baseUrl = 'http://localhost:3000/examples/checkout';
+//live
+
+
+    const baseUrl = 'https://tballcheckout.vercel.app';
+
+
+  
 
     const link = `${baseUrl}/?recipient=${recipient}&amount=${amount}&label=${label}`;
   
