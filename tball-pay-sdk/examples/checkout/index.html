@@ -2,116 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TBallPay SDK – Simple Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buy with TBALL</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .container {
-      background: #f9f9f9;
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-    button {
-      background: #512DA8;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-right: 10px;
-    }
-    button:hover {
-      background: #673AB7;
-    }
-    .input-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    .status {
-      margin-top: 20px;
-      padding: 10px;
-      border-radius: 4px;
-    }
-    .success {
-      background: #E8F5E9;
-      color: #2E7D32;
-    }
-    .error {
-      background: #FFEBEE;
-      color: #C62828;
-    }
-    #tokenSelector {
-      margin-bottom: 15px;
-    }
+    body { font-family: sans-serif; text-align: center; padding: 40px; background: #f8f8f8; }
+    .card { background: white; padding: 30px; border-radius: 12px; max-width: 400px; margin: 0 auto; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+    h1 { font-size: 24px; margin-bottom: 10px; }
+    p { font-size: 18px; color: #444; }
+    button { padding: 12px 20px; font-size: 16px; background-color: #0279FF; color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 20px; }
+    button:hover { background-color: #005dcc; }
+    #statusMessage { margin-top: 20px; font-weight: bold; }
+    a { color: #0279FF; }
   </style>
 </head>
 <body>
-  <h1>TBallPay SDK Example</h1>
-
-  <div class="container">
-    <h2>Wallet</h2>
-    <div>
-      <button id="connectWallet">Connect Wallet</button>
-      <button id="disconnectWallet">Disconnect</button>
-    </div>
-    <div id="walletInfo">Not connected</div>
-    <div id="balance">Balance: 0 TBALL</div>
+  <div class="card">
+    <h1 id="itemLabel">Loading...</h1>
+    <p id="priceText"></p>
+    <button id="buyButton">Buy</button>
+    <div id="statusMessage">Waiting for wallet...</div>
   </div>
 
-  <div class="container">
-    <h2>Send Payment</h2>
-
-    <div class="input-group">
-      <label for="tokenSelector">Token:</label>
-      <select id="tokenSelector">
-        <option value="TBALL">TBALL</option>
-      </select>
-    </div>
-
-    <div class="input-group">
-      <label for="recipient">Recipient Address:</label>
-      <input type="text" id="recipient" placeholder="Solana address" />
-    </div>
-
-    <div class="input-group">
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" placeholder="Amount" step="0.01" min="0" max="1000" />
-    </div>
-
-    <button id="sendPayment">Send Payment</button>
-
-    <div id="statusMessage" class="status">Please connect your wallet and fill in the payment details.</div>
-  </div>
-
-  <!-- Load dependencies -->
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
   <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
-  <script>
-    window.BN = BN;
-  </script>
-
-  <!-- Load the UMD bundle of your renamed SDK -->
+  <script>window.BN = BN;</script>
   <script src="../../dist/tball-pay-sdk.umd.js"></script>
+  <script>
+    const { PaymentProcessor, PhantomAdapter } = TBallPaySDK;
+    const sdk = new PaymentProcessor({ network: 'mainnet-beta' });
+    sdk.setWalletAdapter(new PhantomAdapter());
 
-  <!-- Load the example app -->
-  <script src="app.js"></script>
+    // Parse query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const recipient = urlParams.get('recipient');
+    const amount = parseFloat(urlParams.get('amount'));
+    const label = urlParams.get('label') || 'Unnamed Item';
+
+    document.getElementById('itemLabel').textContent = label;
+    document.getElementById('priceText').textContent = `Pay ${amount} TBALL to complete your purchase`;
+    document.getElementById('buyButton').textContent = `Buy ${label} for ${amount} TBALL`;
+
+    async function buy() {
+      const status = document.getElementById('statusMessage');
+      try {
+        if (!recipient || isNaN(amount)) {
+          status.textContent = 'Missing or invalid recipient or amount.';
+          return;
+        }
+
+        status.textContent = 'Connecting wallet...';
+        await sdk.init();
+        await sdk.connectWallet();
+
+        status.textContent = 'Sending payment...';
+        const result = await sdk.sendTokens({
+          recipient,
+          amount,
+          tokenMint: 'TBALL'
+        });
+
+        status.innerHTML = `✅ Payment sent!<br><a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;
+      } catch (err) {
+        console.error(err);
+        status.textContent = `❌ Error: ${err.message}`;
+      }
+    }
+
+    document.getElementById('buyButton').onclick = buy;
+  </script>
 </body>
 </html>

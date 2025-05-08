@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 
 // Serve static files
-app.use(express.static('examples/simple-payment'));
+app.use(express.static('examples/checkout'));
 app.use('/dist', express.static('dist'));
 
 // API endpoint for Helius key
