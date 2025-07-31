@@ -1,7 +1,7 @@
 // Simple example app
 document.addEventListener('DOMContentLoaded', async () => {
   // Initialize SDK (from your renamed UMD bundle)
-  const { PaymentProcessor, PhantomAdapter } = TBallPaySDK;
+  const { PaymentProcessor, PhantomAdapter } = nyxpayPaySDK;
 
   let sdk;
   try {

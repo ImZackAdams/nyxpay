@@ -13,10 +13,10 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
 
     // UMD bundle for browsers and Node
-    filename: 'tball-pay-sdk.umd.js',
+    filename: 'nyxpay-pay-sdk.umd.js',
 
     // Name of the global variable when included via <script>
-    library: 'TBallPaySDK',
+    library: 'nyxpayPaySDK',
 
     // Export in UMD format (AMD, CommonJS, global)
     libraryTarget: 'umd',
