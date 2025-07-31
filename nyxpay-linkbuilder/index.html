@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>nyxpay Pay – Link Builder</title>
+  <title>Nyx Pay – Link Builder</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🏐 nyxpay Pay Link Builder</h1>
+    <h1>Nyx Pay Link Builder</h1>
     <p>Create a checkout link you can share with buyers, friends, or fans.</p>
 
     <form id="builderForm">
       <label for="label">Item Name/Reason:</label>
       <input type="text" id="label" placeholder="e.g. nyxpay Hat" required />
 
-      <label for="amount">Amount (nyxpay):</label>
+      <label for="amount">Amount (SOL):</label>
       <input type="number" id="amount" placeholder="e.g. 25" required min="0.01" step="0.01"/>
 
       <label for="recipient">Recipient Wallet:</label>
@@ -40,21 +40,54 @@
     </div>
 
     <section id="about" style="margin-top: 3rem;">
-        <section id="about" style="margin-top: 3rem;">
-            <h2>📖 About nyxpay Pay</h2>
-            <p>nyxpay Pay is a fully client side utility for generating Solana payment links and HTML buttons. No servers, no databases, no external requests. Just static JavaScript running in the browser.</p>
-          
-            <p>The builder is deterministic and portable. It can be self hosted, or deployed via IPFS, GitHub Pages, or even from local files. Inputs are encoded into URLs or anchors. nothing is stored or transmitted.</p>
-          
-            <p>An internal SDK supports transaction creation, simulation, and confirmation using the Solana Web3.js library. Wallet adapters are injected at runtime. All RPC calls are made directly from the client to public Solana endpoints.</p>
-          
-            <p>No telemetry. No opaque backend. Just inspectable code that moves tokens.</p>
-          </section>
-          
+      <section id="about" style="margin-top: 3rem;">
+        <h2>About NyxPay</h2>
+      
+        <p>
+          NyxPay is not a product. It’s a weapon.  
+          A browser-native protocol that lets you move money without begging anyone.
+        </p>
+      
+        <p>
+          No backend. No accounts. No databases. No surveillance.  
+          Open the page. Connect your wallet. Fire off a transaction.
+        </p>
+      
+        <p>
+          Two files — <code>index.html</code> and <code>script.js</code>.  
+          That’s all it takes. No servers. No setup. No one to block or ban you.
+        </p>
+      
+        <p>
+          The SDK builds raw Solana transactions in your browser.  
+          Simulates. Signs. Sends. No API keys. No third parties. Just chain access and execution.
+        </p>
+      
+        <p>
+          We don’t log. We don’t track. We couldn’t spy on you if we tried.  
+          There is no backend. There is no "us."
+        </p>
+      
+        <p>
+          Host it anywhere — IPFS, GitHub Pages, localhost, or straight off a flash drive in a Faraday cage.
+        </p>
+      
+        <p>
+          The Vercel demo exists to make it easy for normies.  
+          You don’t need it. The protocol runs without infrastructure.
+        </p>
+      
+        <p>
+          This is not a service. It’s code. It’s yours.  
+          If you need permission to get paid, go cry to Stripe.
+        </p>
+      </section>
+      
+      
     </section>
 
     <footer>
-      <p><a href="#" target="_blank">View SDK on GitHub</a></p>
+     
     </footer>
   </div>
 
