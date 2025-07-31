@@ -78,7 +78,7 @@ class PaymentProcessor {
 
     return await this.walletAdapter.getTokenBalance(
       this.connection,
-      this.wallet.publicKey,
+      new PublicKey(this.wallet.publicKey),
       tokenInfo.mintAddress
     );
   }
@@ -88,13 +88,16 @@ class PaymentProcessor {
     if (!this.walletAdapter) throw new Error('No wallet adapter set');
     if (!recipient || !isValidSolanaAddress(recipient)) throw new Error('Invalid recipient address');
 
+    const senderPubKey = new PublicKey(this.wallet.publicKey);
+    const recipientPubKey = new PublicKey(recipient);
+
     // Handle native SOL transfers
     if (tokenMint === 'SOL') {
       const lamports = Math.floor(amount * 1e9);
       const tx = new Transaction().add(
         SystemProgram.transfer({
-          fromPubkey: this.wallet.publicKey,
-          toPubkey: new PublicKey(recipient),
+          fromPubkey: senderPubKey,
+          toPubkey: recipientPubKey,
           lamports
         })
       );
@@ -102,7 +105,7 @@ class PaymentProcessor {
       const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash('confirmed');
       tx.recentBlockhash = blockhash;
       tx.lastValidBlockHeight = lastValidBlockHeight;
-      tx.feePayer = this.wallet.publicKey;
+      tx.feePayer = senderPubKey;
 
       const simulation = await this.connection.simulateTransaction(tx);
       if (simulation.value.err) throw new Error(`SOL transfer simulation failed: ${JSON.stringify(simulation.value.err)}`);
@@ -124,7 +127,13 @@ class PaymentProcessor {
       throw new Error(`Amount must be between 0 and ${tokenInfo.maxTransferAmount} ${tokenInfo.symbol}`);
     }
 
-    const transaction = await this.createTokenTransferTransaction({ recipient, amount, tokenMint, memo });
+    const transaction = await this.createTokenTransferTransaction({
+      recipient: recipientPubKey,
+      amount,
+      tokenMint,
+      memo
+    });
+
     const simulation = await this.connection.simulateTransaction(transaction);
     if (simulation.value.err) {
       throw new Error(`Transaction simulation failed: ${JSON.stringify(simulation.value.err)}`);
@@ -141,13 +150,13 @@ class PaymentProcessor {
   }
 
   async createTokenTransferTransaction({ recipient, amount, tokenMint, memo }) {
-    const recipientPubKey = new PublicKey(recipient);
+    const senderPubKey = new PublicKey(this.wallet.publicKey);
     const tokenInfo = this.tokenRegistry.getToken(tokenMint);
     const mintPubKey = new PublicKey(tokenInfo.mintAddress);
     const transferAmount = Math.floor(amount * Math.pow(10, tokenInfo.decimals));
 
-    const senderTokenAccount = await findAssociatedTokenAccount(this.wallet.publicKey, mintPubKey);
-    const recipientTokenAccount = await findAssociatedTokenAccount(recipientPubKey, mintPubKey);
+    const senderTokenAccount = await findAssociatedTokenAccount(senderPubKey, mintPubKey);
+    const recipientTokenAccount = await findAssociatedTokenAccount(recipient, mintPubKey);
 
     let transaction = new Transaction();
 
@@ -155,8 +164,8 @@ class PaymentProcessor {
     if (!recipientAccountInfo) {
       transaction.add(
         createAssociatedTokenAccountInstruction(
-          this.wallet.publicKey,
-          recipientPubKey,
+          senderPubKey,
+          recipient,
           mintPubKey
         )
       );
@@ -166,19 +175,19 @@ class PaymentProcessor {
       createTransferInstruction(
         senderTokenAccount,
         recipientTokenAccount,
-        this.wallet.publicKey,
+        senderPubKey,
         transferAmount
       )
     );
 
     if (memo) {
-      // Memo instruction logic could be added here
+      // Add memo logic here if needed
     }
 
     const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash('confirmed');
     transaction.recentBlockhash = blockhash;
     transaction.lastValidBlockHeight = lastValidBlockHeight;
-    transaction.feePayer = this.wallet.publicKey;
+    transaction.feePayer = senderPubKey;
 
     return transaction;
   }
