@@ -51,27 +51,29 @@
     <div id="statusMessage">Waiting for wallet...</div>
   </div>
 
+  <!-- Required external libs -->
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
   <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
   <script>window.BN = BN;</script>
   <script src="nyxpay-pay-sdk.umd.js"></script>
+
+
   <script>
     const { PaymentProcessor, PhantomAdapter } = nyxpayPaySDK;
     const sdk = new PaymentProcessor({ network: 'mainnet-beta' });
     sdk.setWalletAdapter(new PhantomAdapter());
 
+    // Read from query string
     const urlParams = new URLSearchParams(window.location.search);
     const recipient = urlParams.get('recipient');
     const amount = parseFloat(urlParams.get('amount'));
-    const label = urlParams.get('label') || 'Unnamed Item';
-    const tokenMint = urlParams.get('token') || 'SOL'; // ✅ FIXED to match checkout link
+    const label = decodeURIComponent(urlParams.get('label') || 'Unnamed Item');
+    const token = urlParams.get('token') || 'SOL';
 
-    const priceText = `Pay ${amount} ${tokenMint} to complete your purchase`;
-    const buttonText = `Buy ${label} for ${amount} ${tokenMint}`;
-
+    // Update UI
     document.getElementById('itemLabel').textContent = label;
-    document.getElementById('priceText').textContent = priceText;
-    document.getElementById('buyButton').textContent = buttonText;
+    document.getElementById('priceText').textContent = `Pay ${amount} ${token} to complete your purchase`;
+    document.getElementById('buyButton').textContent = `Buy ${label} for ${amount} ${token}`;
 
     async function buy() {
       const status = document.getElementById('statusMessage');
@@ -81,18 +83,23 @@
           status.style.color = '#ff6b6b';
           return;
         }
+
         status.textContent = 'Connecting wallet...';
         status.style.color = '#dddddd';
+
         await sdk.init();
         await sdk.connectWallet();
+
         status.textContent = 'Sending payment...';
         const result = await sdk.sendTokens({
           recipient,
           amount,
-          tokenMint // now correctly pulled from `token` param
+          tokenMint: token
         });
+
         status.innerHTML = `✅ Payment sent!<br><a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;
         status.style.color = '#ffbb80';
+
       } catch (err) {
         console.error(err);
         status.textContent = `❌ Error: ${err.message}`;
