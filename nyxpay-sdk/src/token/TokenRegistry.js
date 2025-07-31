@@ -1,65 +1,83 @@
+// src/token/TokenRegistry.js
+
 /**
- * Registry for managing supported Solana tokens (including native SOL)
+ * TokenRegistry – Manages supported Solana tokens including native SOL and SPL tokens
  */
 class TokenRegistry {
   constructor() {
     this.tokens = {
-      // Native SOL (does not use a mint address)
-      'SOL': {
+      SOL: {
         name: 'Solana',
         symbol: 'SOL',
-        mintAddress: null, // Native, no mint
+        isNative: true,
+        mintAddress: null, // Native SOL has no mint
         decimals: 9,
         maxTransferAmount: 100, // Max in SOL
         logoUrl: 'https://cryptologos.cc/logos/solana-sol-logo.png'
       }
 
-      // Add SPL tokens here if needed (e.g., USDC, NYXPAY)
+      // Add additional SPL tokens below if needed:
+      // USDC: {
+      //   name: 'USD Coin',
+      //   symbol: 'USDC',
+      //   isNative: false,
+      //   mintAddress: 'INSERT_MINT_ADDRESS_HERE',
+      //   decimals: 6,
+      //   maxTransferAmount: 1000,
+      //   logoUrl: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png'
+      // }
     };
   }
 
   /**
    * Get token by symbol or mint address
-   * @param {string} tokenIdentifier - Token symbol or mint address
-   * @returns {Object|null} - Token info or null if not found
+   * @param {string} identifier - Symbol or mint address
+   * @returns {Object|null}
    */
-  getToken(tokenIdentifier) {
-    // Check by symbol
-    if (this.tokens[tokenIdentifier]) {
-      return this.tokens[tokenIdentifier];
+  getToken(identifier) {
+    if (this.tokens[identifier]) {
+      return this.tokens[identifier];
     }
 
-    // Check by mint address (skip nulls like SOL)
     return Object.values(this.tokens).find(
-      token => token.mintAddress && token.mintAddress === tokenIdentifier
+      token => token.mintAddress && token.mintAddress === identifier
     ) || null;
   }
 
   /**
-   * Add a new SPL token to the registry
-   * @param {Object} tokenInfo - Token information
-   * @returns {Object} - Added token info
+   * Add a new SPL token
+   * @param {Object} token
+   * @param {string} token.symbol - Token symbol (required)
+   * @param {string|null} token.mintAddress - Mint address (required for SPL)
+   * @param {string} [token.name] - Human-readable name
+   * @param {number} [token.decimals=9] - Decimal places
+   * @param {number} [token.maxTransferAmount=1000]
+   * @param {string|null} [token.logoUrl]
+   * @param {boolean} [token.isNative=false]
+   * @returns {Object} - Registered token
    */
-  addToken(tokenInfo) {
-    if (!tokenInfo.symbol || (!tokenInfo.mintAddress && tokenInfo.symbol !== 'SOL')) {
-      throw new Error('Token must have symbol and (for SPL tokens) a mintAddress');
-    }
+  addToken(token) {
+    const { symbol, mintAddress, name, decimals, maxTransferAmount, logoUrl, isNative } = token;
 
-    this.tokens[tokenInfo.symbol] = {
-      name: tokenInfo.name || tokenInfo.symbol,
-      symbol: tokenInfo.symbol,
-      mintAddress: tokenInfo.mintAddress || null,
-      decimals: tokenInfo.decimals ?? 9,
-      maxTransferAmount: tokenInfo.maxTransferAmount ?? 1000,
-      logoUrl: tokenInfo.logoUrl || null
+    if (!symbol) throw new Error('Token must include a symbol');
+    if (!isNative && !mintAddress) throw new Error('SPL token must include a mint address');
+
+    this.tokens[symbol] = {
+      name: name || symbol,
+      symbol,
+      mintAddress: isNative ? null : mintAddress,
+      decimals: decimals ?? 9,
+      maxTransferAmount: maxTransferAmount ?? 1000,
+      logoUrl: logoUrl || null,
+      isNative: !!isNative
     };
 
-    return this.tokens[tokenInfo.symbol];
+    return this.tokens[symbol];
   }
 
   /**
    * Get all registered tokens
-   * @returns {Object} - All tokens
+   * @returns {Object}
    */
   getAllTokens() {
     return this.tokens;
@@ -67,8 +85,8 @@ class TokenRegistry {
 
   /**
    * Remove a token from the registry
-   * @param {string} symbol - Token symbol
-   * @returns {boolean} - True if removed
+   * @param {string} symbol
+   * @returns {boolean}
    */
   removeToken(symbol) {
     if (this.tokens[symbol]) {

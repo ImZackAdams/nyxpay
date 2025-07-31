@@ -9,7 +9,7 @@ document.getElementById('builderForm').addEventListener('submit', (e) => {
 
   const label = encodeURIComponent(labelRaw);
   const baseUrl = 'https://nyxpaycheckout.vercel.app';
-  const link = `${baseUrl}/?recipient=${recipient}&amount=${amount}&label=${label}&token=SOL`;
+  const link = `${baseUrl}/?recipient=${recipient}&amount=${amount}&label=${label}&tokenMint=SOL`;
 
   // Show checkout link
   const output = document.getElementById('output');
