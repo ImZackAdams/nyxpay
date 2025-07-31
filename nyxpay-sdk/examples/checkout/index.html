@@ -4,44 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buy with nyxpay</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 40px;
-      background: #0a0a0a;
-      color: #f5f5f5;
-    }
-    .card {
-      background: #161616;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 400px;
-      margin: 0 auto;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-    }
-    h1 { font-size: 24px; margin-bottom: 10px; color: #ffffff; }
-    p { font-size: 18px; color: #aaaaaa; }
-    button {
-      padding: 12px 20px;
-      font-size: 16px;
-      background-color: #ff6b00;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 20px;
-      transition: background-color 0.2s;
-    }
-    button:hover { background-color: #e05a00; }
-    #statusMessage {
-      margin-top: 20px;
-      font-weight: bold;
-      color: #dddddd;
-    }
-    a { color: #ff9c41; transition: color 0.2s; }
-    a:hover { color: #ffbb80; }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="card">
@@ -57,20 +20,17 @@
   <script>window.BN = BN;</script>
   <script src="nyxpay-pay-sdk.umd.js"></script>
 
-
   <script>
     const { PaymentProcessor, PhantomAdapter } = nyxpayPaySDK;
     const sdk = new PaymentProcessor({ network: 'mainnet-beta' });
     sdk.setWalletAdapter(new PhantomAdapter());
 
-    // Read from query string
     const urlParams = new URLSearchParams(window.location.search);
     const recipient = urlParams.get('recipient');
     const amount = parseFloat(urlParams.get('amount'));
     const label = decodeURIComponent(urlParams.get('label') || 'Unnamed Item');
     const token = urlParams.get('token') || 'SOL';
 
-    // Update UI
     document.getElementById('itemLabel').textContent = label;
     document.getElementById('priceText').textContent = `Pay ${amount} ${token} to complete your purchase`;
     document.getElementById('buyButton').textContent = `Buy ${label} for ${amount} ${token}`;
@@ -99,7 +59,6 @@
 
         status.innerHTML = `✅ Payment sent!<br><a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;
         status.style.color = '#ffbb80';
-
       } catch (err) {
         console.error(err);
         status.textContent = `❌ Error: ${err.message}`;
