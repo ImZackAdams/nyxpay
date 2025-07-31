@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Buy with TBALL</title>
+  <title>Buy with nyxpay</title>
   <style>
     body { 
       font-family: sans-serif; 
@@ -75,9 +75,9 @@
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
   <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
   <script>window.BN = BN;</script>
-  <script src="tball-pay-sdk.umd.js"></script>
+  <script src="nyxpay-pay-sdk.umd.js"></script>
   <script>
-    const { PaymentProcessor, PhantomAdapter } = TBallPaySDK;
+    const { PaymentProcessor, PhantomAdapter } = nyxpayPaySDK;
     const sdk = new PaymentProcessor({ network: 'mainnet-beta' });
     sdk.setWalletAdapter(new PhantomAdapter());
     // Parse query parameters
@@ -86,8 +86,8 @@
     const amount = parseFloat(urlParams.get('amount'));
     const label = urlParams.get('label') || 'Unnamed Item';
     document.getElementById('itemLabel').textContent = label;
-    document.getElementById('priceText').textContent = `Pay ${amount} TBALL to complete your purchase`;
-    document.getElementById('buyButton').textContent = `Buy ${label} for ${amount} TBALL`;
+    document.getElementById('priceText').textContent = `Pay ${amount} nyxpay to complete your purchase`;
+    document.getElementById('buyButton').textContent = `Buy ${label} for ${amount} nyxpay`;
     async function buy() {
       const status = document.getElementById('statusMessage');
       try {
@@ -104,7 +104,7 @@
         const result = await sdk.sendTokens({
           recipient,
           amount,
-          tokenMint: 'TBALL'
+          tokenMint: 'nyxpay'
         });
         status.innerHTML = `✅ Payment sent!<br><a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;
         status.style.color = '#ffbb80'; // Success color

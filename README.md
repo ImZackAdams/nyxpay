@@ -1,11 +1,11 @@
 # 🏐 Solana Payments SDK
 
-A lightweight JavaScript SDK to power custom token payments on the Solana blockchain. Easily connect Phantom, manage balances, and send SPL tokens (like $TBALL) from any browser app — no smart contracts or backend required.
+A lightweight JavaScript SDK to power custom token payments on the Solana blockchain. Easily connect Phantom, manage balances, and send SPL tokens (like $nyxpay) from any browser app — no smart contracts or backend required.
 
 ## 🚀 Features
 
 - 🔐 Phantom wallet integration (connect/disconnect)
-- 🪙 Send SPL tokens (e.g. TBALL) between wallets
+- 🪙 Send SPL tokens (e.g. nyxpay) between wallets
 - 🧠 Token registry with built-in metadata
 - ✅ Input validation and transaction simulation
 - 🔄 Real-time balance fetching
@@ -42,7 +42,7 @@ npm install solana-payments-sdk
 <body>
   <h1>Solana Payments SDK</h1>
   <button id="connectWallet">Connect Wallet</button>
-  <button id="sendPayment">Send 5 TBALL</button>
+  <button id="sendPayment">Send 5 nyxpay</button>
   <div id="statusMessage"></div>
   <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
   <script src="https://unpkg.com/bn.js@5.2.1/lib/bn.js"></script>
@@ -63,7 +63,7 @@ npm install solana-payments-sdk
       const result = await processor.sendTokens({
         recipient: 'EnterRecipientPublicKeyHere',
         amount: 5,
-        tokenMint: 'TBALL'
+        tokenMint: 'nyxpay'
       });
       document.getElementById('statusMessage').innerHTML =
         `Payment sent! <a href="${result.explorerUrl}" target="_blank">View on Solscan</a>`;

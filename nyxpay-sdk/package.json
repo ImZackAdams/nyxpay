@@ -1,19 +1,20 @@
 {
-  "name": "tball-pay-sdk",
+  "name": "@nyxstack/nyxpay-sdk",
   "version": "1.0.0",
-  "description": "Lightweight JavaScript SDK for TBALL token payments on the Solana blockchain",
+  "description": "A lightweight JavaScript SDK for Solana-based token payments using NyxPay",
   "keywords": [
+    "nyxpay",
     "solana",
     "payments",
     "sdk",
-    "tball",
     "spl-token",
-    "phantom"
+    "phantom",
+    "nyxstack"
   ],
-  "author": "Zack Adams",
+  "author": "Zack Adams <imZackAdams@protonmail.com>",
   "license": "MIT",
-  "main": "dist/tball-pay-sdk.umd.js",
-  "module": "dist/tball-pay-sdk.esm.js",
+  "main": "dist/nyxpay-sdk.umd.js",
+  "module": "dist/nyxpay-sdk.esm.js",
   "files": [
     "dist"
   ],
@@ -22,16 +23,16 @@
     "build:dev": "webpack --mode=development",
     "dev": "webpack --mode=development --watch",
     "serve": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No tests yet\" && exit 0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/tball-pay-sdk.git"
+    "url": "https://github.com/zackadams/nyxpay-sdk"
   },
   "bugs": {
-    "url": "https://github.com/your-username/tball-pay-sdk/issues"
+    "url": "https://github.com/zackadams/nyxpay-sdk/issues"
   },
-  "homepage": "https://github.com/your-username/tball-pay-sdk#readme",
+  "homepage": "https://github.com/zackadams/nyxpay-sdk#readme",
   "dependencies": {
     "@solana/web3.js": "^1.98.0",
     "bn.js": "^5.2.1",
@@ -48,8 +49,8 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/tball-pay-sdk.esm.js",
-      "require": "./dist/tball-pay-sdk.umd.js"
+      "import": "./dist/nyxpay-sdk.esm.js",
+      "require": "./dist/nyxpay-sdk.umd.js"
     }
   }
 }
