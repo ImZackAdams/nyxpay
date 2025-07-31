@@ -1,116 +1,358 @@
+/* MODERN RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    font-family: sans-serif;
-    background: #0a0a0a;
-    padding: 30px;
-    text-align: center;
-    color: #f5f5f5;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  color: #ffffff;
+  padding: 40px 20px;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated background particles */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* CONTAINER: Glassmorphism with depth */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 60px 50px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  transform: perspective(1000px) rotateX(2deg);
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.container:hover {
+  transform: perspective(1000px) rotateX(0deg) translateY(-8px);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* HEADER: Bold typography with gradient */
+h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 800;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #78c6ff 0%, #ff77c6 50%, #78dbff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #78c6ff, #ff77c6);
+  border-radius: 2px;
+  animation: expand 2s ease-out;
+}
+
+@keyframes expand {
+  from { width: 0; }
+  to { width: 60px; }
+}
+
+/* BODY COPY: Enhanced readability */
+p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 24px 0;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* FORM LABELS: Sleek and modern */
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #78c6ff;
+  margin: 32px 0 12px;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+/* INPUTS: Floating style with micro-interactions */
+input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+input:focus {
+  outline: none;
+  border-color: #78c6ff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 0 0 3px rgba(120, 198, 255, 0.1),
+    0 8px 24px rgba(120, 198, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  transition: opacity 0.3s ease;
+}
+
+input:focus::placeholder {
+  opacity: 0;
+}
+
+/* BUTTON: 3D with magnetic hover */
+button {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #ff77c6 0%, #78c6ff 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 
+    0 8px 24px rgba(255, 119, 198, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+button:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 16px 40px rgba(255, 119, 198, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:active {
+  transform: translateY(-2px);
+}
+
+/* OUTPUT: Elevated success card */
+#output h2 {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 48px;
+  padding-bottom: 16px;
+  position: relative;
+}
+
+#output h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #78c6ff, #ff77c6);
+  border-radius: 1px;
+}
+
+#checkoutLink {
+  background: rgba(0, 0, 0, 0.4);
+  color: #78c6ff;
+  font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+  font-size: 14px;
+  padding: 20px;
+  border: 1px solid rgba(120, 198, 255, 0.3);
+  border-radius: 12px;
+  margin-top: 16px;
+  word-break: break-all;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Copy button: Minimal with hover magic */
+#copyButton {
+  background: transparent;
+  color: #78c6ff;
+  border: 2px solid rgba(120, 198, 255, 0.3);
+  padding: 12px 20px;
+  margin-top: 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+#copyButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #78c6ff, #ff77c6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#copyButton:hover {
+  border-color: #78c6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(120, 198, 255, 0.2);
+}
+
+#copyButton:hover::before {
+  opacity: 0.1;
+}
+
+#copyButton span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Footer: Subtle elegance */
+footer {
+  margin-top: 60px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  font-weight: 400;
+}
+
+footer a {
+  color: #78c6ff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #78c6ff;
+  transition: width 0.3s ease;
+}
+
+footer a:hover::after {
+  width: 100%;
+}
+
+/* Responsive enhancements */
+@media (max-width: 768px) {
+  body {
+    padding: 20px 16px;
   }
   
   .container {
-    max-width: 500px;
-    margin: 0 auto;
-    background: #161616;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    padding: 40px 30px;
+    border-radius: 20px;
+    transform: none;
   }
   
-  h1 {
-    color: #ffffff;
-    font-size: 24px;
-  }
-  
-  p {
-    color: #aaaaaa;
-    margin-bottom: 20px;
-  }
-  
-  label {
-    display: block;
-    text-align: left;
-    color: #dddddd;
-    margin-top: 15px;
-    font-size: 14px;
-  }
-  
-  input, button {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #333;
-    font-size: 16px;
-    box-sizing: border-box;
-    background-color: #222222;
-    color: #ffffff;
-  }
-  
-  input:focus {
-    border-color: #ff6b00;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 107, 0, 0.3);
-  }
-  
-  input::placeholder {
-    color: #777777;
+  .container:hover {
+    transform: translateY(-4px);
   }
   
   button {
-    background: #ff6b00;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.2s;
+    padding: 16px;
+    font-size: 15px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
   
-  button:hover {
-    background: #e05a00;
+  body::before {
+    animation: none;
+  }
+}
+
+/* Dark mode refinements */
+@media (prefers-color-scheme: light) {
+  body {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+    color: #1e293b;
   }
   
-  .hidden {
-    display: none;
+  .container {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
   
-  #output h2 {
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    margin-top: 30px;
+  input {
+    background: rgba(0, 0, 0, 0.03);
+    color: #1e293b;
   }
-  
-  #output h2:before {
-    content: "🎯";
-    margin-right: 8px;
-  }
-  
-  #checkoutLink {
-    font-size: 14px;
-    background-color: #222222;
-    padding: 12px;
-    border: 1px solid #333;
-    margin-bottom: 10px;
-  }
-  
-  #copyButton {
-    background-color: #333333;
-    margin-bottom: 20px;
-  }
-  
-  #copyButton:hover {
-    background-color: #444444;
-  }
-  
-  footer {
-    margin-top: 30px;
-  }
-  
-  footer a {
-    color: #ff9c41;
-    text-decoration: none;
-  }
-  
-  footer a:hover {
-    text-decoration: underline;
-    color: #ffbb80;
-  }
+}
