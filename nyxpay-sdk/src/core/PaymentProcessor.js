@@ -1,4 +1,4 @@
-// src/core/PaymentProcessor.js
+// src/core/PaymentProcessor.js - Fixed RPC endpoints
 import {
   Connection,
   PublicKey,
@@ -18,13 +18,27 @@ import { isValidSolanaAddress } from '../utils/validation';
  */
 class PaymentProcessor {
   constructor(config = {}) {
+    // Better default RPC endpoints
+    const getDefaultRPC = (network) => {
+      switch (network) {
+        case 'devnet':
+          return 'https://api.devnet.solana.com';
+        case 'testnet':
+          return 'https://api.testnet.solana.com';
+        case 'mainnet-beta':
+        default:
+          // Use a more reliable mainnet endpoint
+          return 'https://solana-api.projectserum.com';
+      }
+    };
+
     this.config = {
-      network: config.network || 'mainnet-beta',
-      rpcEndpoint: config.rpcEndpoint || 'https://api.mainnet-beta.solana.com',
-      commitment: config.commitment || 'processed',
-      confirmationBlocks: config.confirmationBlocks || 32,
-      transactionTimeout: config.transactionTimeout || 90000,
-      retryAttempts: config.retryAttempts || 5,
+      network: config.network || 'devnet', // Default to devnet for testing
+      rpcEndpoint: config.rpcEndpoint || getDefaultRPC(config.network || 'devnet'),
+      commitment: config.commitment || 'confirmed', // Changed from 'processed' for better reliability
+      confirmationBlocks: config.confirmationBlocks || 15, // Reduced for faster confirmations
+      transactionTimeout: config.transactionTimeout || 60000, // Reduced timeout
+      retryAttempts: config.retryAttempts || 3, // Reduced retries
       ...config
     };
 
@@ -38,14 +52,46 @@ class PaymentProcessor {
   async init() {
     if (this.initialized) return true;
 
-    this.connection = new Connection(this.config.rpcEndpoint, {
-      commitment: this.config.commitment,
-      wsEndpoint: this.config.rpcEndpoint.replace('https', 'wss'),
-      confirmTransactionInitialTimeout: 120000
-    });
+    // Add retry logic for connection initialization
+    let attempts = 0;
+    const maxAttempts = 3;
+    
+    while (attempts < maxAttempts) {
+      try {
+        this.connection = new Connection(this.config.rpcEndpoint, {
+          commitment: this.config.commitment,
+          confirmTransactionInitialTimeout: 60000, // Reduced timeout
+          disableRetryOnRateLimit: false,
+          httpHeaders: {
+            'Content-Type': 'application/json',
+          }
+        });
 
-    this.initialized = true;
-    return true;
+        // Test the connection
+        await this.connection.getLatestBlockhash();
+        this.initialized = true;
+        return true;
+        
+      } catch (error) {
+        attempts++;
+        console.warn(`RPC connection attempt ${attempts} failed:`, error.message);
+        
+        if (attempts >= maxAttempts) {
+          throw new Error(`Failed to connect to RPC after ${maxAttempts} attempts. Last error: ${error.message}`);
+        }
+        
+        // Try fallback endpoints
+        if (attempts === 2 && this.config.network === 'mainnet-beta') {
+          this.config.rpcEndpoint = 'https://rpc.ankr.com/solana';
+        }
+        if (attempts === 3 && this.config.network === 'mainnet-beta') {
+          this.config.rpcEndpoint = 'https://solana-mainnet.g.alchemy.com/v2/demo';
+        }
+        
+        // Wait before retry
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
   }
 
   setWalletAdapter(adapter) {
@@ -94,6 +140,12 @@ class PaymentProcessor {
     // Handle native SOL transfers
     if (tokenMint === 'SOL') {
       const lamports = Math.floor(amount * 1e9);
+      
+      // Validate amount is reasonable
+      if (lamports > 1000 * 1e9) { // More than 1000 SOL
+        throw new Error('Amount too large for safety. Maximum 1000 SOL per transaction.');
+      }
+      
       const tx = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: senderPubKey,
@@ -108,15 +160,21 @@ class PaymentProcessor {
       tx.feePayer = senderPubKey;
 
       const simulation = await this.connection.simulateTransaction(tx);
-      if (simulation.value.err) throw new Error(`SOL transfer simulation failed: ${JSON.stringify(simulation.value.err)}`);
+      if (simulation.value.err) {
+        throw new Error(`SOL transfer simulation failed: ${JSON.stringify(simulation.value.err)}`);
+      }
 
       const signature = await this.walletAdapter.signAndSendTransaction(tx);
       const confirmation = await this.waitForConfirmation(signature);
 
+      const explorerBaseUrl = this.config.network === 'devnet' ? 
+        'https://solscan.io/tx' : 'https://solscan.io/tx';
+      const clusterParam = this.config.network === 'devnet' ? '?cluster=devnet' : '';
+
       return {
         signature,
         confirmation,
-        explorerUrl: `https://solscan.io/tx/${signature}`
+        explorerUrl: `${explorerBaseUrl}/${signature}${clusterParam}`
       };
     }
 
@@ -142,10 +200,14 @@ class PaymentProcessor {
     const signature = await this.walletAdapter.signAndSendTransaction(transaction);
     const confirmation = await this.waitForConfirmation(signature);
 
+    const explorerBaseUrl = this.config.network === 'devnet' ? 
+      'https://solscan.io/tx' : 'https://solscan.io/tx';
+    const clusterParam = this.config.network === 'devnet' ? '?cluster=devnet' : '';
+
     return {
       signature,
       confirmation,
-      explorerUrl: `https://solscan.io/tx/${signature}`
+      explorerUrl: `${explorerBaseUrl}/${signature}${clusterParam}`
     };
   }
 
@@ -213,7 +275,7 @@ class PaymentProcessor {
               resolve({
                 status: 'pending',
                 signature,
-                explorerUrl: `https://solscan.io/tx/${signature}`
+                explorerUrl: `https://solscan.io/tx/${signature}${this.config.network === 'devnet' ? '?cluster=devnet' : ''}`
               });
               return;
             }
@@ -243,7 +305,7 @@ class PaymentProcessor {
       };
 
       timeoutId = setTimeout(timeout, this.config.transactionTimeout);
-      intervalId = setInterval(check, 2000);
+      intervalId = setInterval(check, 1500); // Slightly faster polling
       check();
     });
   }
