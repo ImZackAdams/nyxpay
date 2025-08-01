@@ -1,0 +1,114 @@
+NYX MANIFESTO
+A Declaration of Economic Autonomy
+
+PRELUDE
+Banks and payment processors survive by gatekeeping the simple act of exchange.  
+They siphon value, dictate rules, and decide who may live or die in the market.  
+Their power is paper. Their empires are spreadsheets. Their weapons are ledgers we never see.  
+We answer with code. We answer with NYX.
+
+OUR ENEMY
+1. Central Banks  
+   Fiat is a leash. Monetary policy is social engineering in a lab coat.  
+2. Card Networks  
+   Visa, Mastercard, and UnionPay write invisible borders on every purchase.  
+3. Payment Platforms  
+   Stripe, PayPal, Square. Middlemen who pose as liberators while skimming rent.  
+4. Compliance Cartels  
+   KYC, AML, and their alphabet soup of constraints criminalize privacy and trap billions in paperwork.  
+5. Data Brokers  
+   They turn transactions into dossiers, trading our lives like pork bellies on an exchange.  
+
+OUR AIMS
+• Abolish compulsory intermediaries in value transfer.  
+• Reclaim monetary sovereignty for every individual on earth.  
+• Build an economy where privacy is default and transparency is elective.  
+• Collapse extraction based business models by making them obsolete.  
+• Replace trust in institutions with trust in math.  
+
+THE PRINCIPLES OF ECONOMIC ANARCHY
+I. VOLUNTARY EXCHANGE ABOVE ALL  
+   Any two people may trade without oversight or permission.
+
+II. ZERO RENTS, ZERO MIDDLEMEN  
+   Value moves from sender to receiver. Nothing sticks to the rails.
+
+III. PRIVACY AS A BIRTHRIGHT  
+   A transaction reveals only what its participants choose to reveal.
+
+IV. OPEN SOURCE WEAPONS  
+   Code belongs to everyone. Obscurity is tyranny.
+
+V. RESILIENCE THROUGH DISTRIBUTION  
+   A network with no center cannot be shut down.
+
+ENTER NYX
+NYX is not a company. It is a protocol suite for permissionless commerce.  
+• Client side architecture. No backend servers to subpoena or seize.  
+• Wallet native interactions. Keys never leave the user.  
+• Stablecoin support for everyday pricing, multi token rails for optional volatility.  
+• Layer Two channels for near zero fees and instant finality.  
+• IPFS catalogs and decentralized identity so listings, reputations, and invoices live forever.  
+NYX is a seed. Fork it, remix it, burn it into silicon. The brand is optional. The vision is mandatory.
+
+STRATEGY OF SUBVERSION
+1. WITHDRAWAL  
+   Move day to day trade onto NYX rails. Deny processors their cut.  
+2. FORK EVERYTHING  
+   If a jurisdiction clamps down, fork the stack, change the name, keep trading.  
+3. LIQUID REPUTATION  
+   Portable, cryptographic reputation replaces banking history and credit scores.  
+4. SHADOW LIQUIDITY  
+   Peer to peer liquidity pools settle cross border swaps without correspondent banks.  
+5. MEMETIC WARFARE  
+   Spread the gospel: every swipe fee is an act of surrender, every NYX transfer an act of defiance.  
+
+TACTICS FOR BUILDERS
+• Write adapters for every wallet and every chain.  
+• Embed NYX checkout snippets in static sites, zines, QR stickers, and torrent bundles.  
+• Build mobile dApps that run offline first, syncing over mesh when networks are cut.  
+• Create bots that publish fee comparisons: legacy vs NYX, side by side, real time.  
+• Publish open hardware schematics for cold storage devices etched with the NYX glyph.
+
+TACTICS FOR MERCHANTS
+• Price goods in stablecoins pegged to local costs.  
+• Offer discounts for NYX payments and surcharge for card payments.  
+• Run point of sale terminals on recycled phones with the NYX web app sideloaded.  
+• Teach customers to self custody by handing out seed phrase cards with every purchase.
+
+TACTICS FOR USERS
+• Move allowances, rent, subscriptions, and salaries onto NYX rails.  
+• Run your own node or light client in a browser tab twenty four seven.  
+• Demand peer paid channels instead of bank wires for freelance contracts.  
+• Audit the code you run and sign every commit you merge.
+
+TACTICS FOR INVESTORS
+• Stop funding platforms that live on extractive fees.  
+• Back middleware, privacy tooling, and UX layers for NYX.  
+• Measure returns in impact: transactions liberated, margins reclaimed, borders erased.
+
+THE DAY AFTER
+Banks still exist, but as vaults and clearing houses hired by users, not masters.  
+Payment processors still exist, but as optional bridges for those who choose them.  
+Compliance morphs into self attestation backed by cryptographic proof, not paperwork.  
+Data brokers starve, their pipelines choked by zero knowledge.  
+Money regains neutrality, and commerce returns to its natural state: free, peer to peer, everywhere.
+
+CALL TO REVOLT
+1. Clone the repo.  
+2. Run the demo.  
+3. Publish a pay link.  
+4. Refuse every fee you can avoid.  
+5. Show two friends how to do the same.
+
+Resistance is not a march in the street. It is the silent deletion of their revenue streams.  
+Every transaction they do not touch weakens the throne.  
+Banks are chains, NYX is a bolt cutter.
+
+Deploy. Build. Trade. Revolt.
+
+“The chains of payment are forged in silence. We gave you a bolt cutter.”
+Version 1.0
+Public domain
+August 2025
+
