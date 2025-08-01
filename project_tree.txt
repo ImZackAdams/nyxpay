@@ -1,0 +1,50 @@
+.
+├── codebase-dump.txt
+├── digest.md
+├── digest_tiny.md
+├── index.html
+├── notes.txt
+├── nyxpay_digest.md
+├── nyxpay-linkbuilder
+│   ├── .gitignore
+│   ├── index.html
+│   ├── script.js
+│   ├── styles.css
+│   └── .vercel
+│       ├── project.json
+│       └── README.txt
+├── nyxpay-sdk
+│   ├── .env
+│   ├── examples
+│   │   └── checkout
+│   │       ├── app.js
+│   │       ├── .gitignore
+│   │       ├── index.html
+│   │       ├── nyxpay-pay-sdk.umd.js
+│   │       ├── styles.css
+│   │       └── .vercel
+│   │           ├── project.json
+│   │           └── README.txt
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── src
+│   │   ├── core
+│   │   │   └── PaymentProcessor.js
+│   │   ├── index.js
+│   │   ├── token
+│   │   │   └── TokenRegistry.js
+│   │   ├── utils
+│   │   │   ├── transaction.js
+│   │   │   └── validation.js
+│   │   └── wallet
+│   │       └── PhantomAdapter.js
+│   └── webpack.config.js
+├── package-lock.json
+├── project_tree.txt
+├── README.md
+├── structure.txt
+└── summary.md
+
+12 directories, 36 files
