@@ -1,20 +1,17 @@
 /* 
- * SOL P2P - Because fuck Stripe and their 2.9% robbery
- * Built by degenerates, for degenerates
- * 0% fees, 100% based, infinite% fuck you energy
+ * NYXPAY - EDGY BUT ACCESSIBLE
+ * Cool enough for hackers, simple enough for grandma
  * 
- * "I could build PayPal in a weekend" - every crypto bro ever
- * Well guess what? We actually fucking did it.
+ * "Design is not just what it looks like and feels like. 
+ *  Design is how it works." - Steve Jobs
  * 
- * No KYC, no AML, no compliance theater bullshit
- * Just pure peer-to-peer value transfer on the fastest chain
- * 
- * Regulatory capture is cringe. Code is law. Solana is speed.
+ * Rebellious spirit, user-friendly soul.
+ * Now with the mystique of Nyx - goddess of the night.
  */
 
- @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
 
- /* Reset because I don't trust browser defaults */
+ /* Reset - because consistency matters */
  * {
    box-sizing: border-box;
    margin: 0;
@@ -22,443 +19,356 @@
  }
  
  ::selection {
-   background: #14f195;
+   background: #a855f7;
    color: #000;
  }
  
  body {
-   font-family: 'IBM Plex Mono', 'SF Mono', 'Monaco', monospace;
-   background: 
-     radial-gradient(circle at 20% 20%, rgba(20, 241, 149, 0.03) 0%, transparent 50%),
-     radial-gradient(circle at 80% 80%, rgba(220, 31, 255, 0.03) 0%, transparent 50%),
-     linear-gradient(135deg, #000000 0%, #0a0012 50%, #000000 100%);
-   color: #14f195;
+   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+   background: linear-gradient(135deg, #0f0b1a 0%, #1a0f2e 50%, #2d0f4a 100%);
+   color: #e0e0e0;
    padding: 20px;
    min-height: 100vh;
-   position: relative;
-   overflow-x: hidden;
+   font-size: 16px;
+   line-height: 1.5;
    font-weight: 400;
-   line-height: 1.4;
  }
  
- /* Live Solana network stats ticker because we're not LARPing */
+ /* Subtle edge - status bar */
  body::before {
-   content: '◉ SOL MAINNET • TPS: 4,327 • SLOT: 234,567,890 • EPOCH: 423 • PING: 12ms • FEES: 0.000005 SOL • VALIDATORS: 1,889 ';
+   content: '🌙 SECURE • PRIVATE • DECENTRALIZED';
    position: fixed;
    top: 0;
    left: 0;
-   width: 400%;
-   height: 25px;
-   background: #14f195;
+   right: 0;
+   background: linear-gradient(90deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
    color: #000;
-   font-size: 11px;
-   font-weight: 700;
-   line-height: 25px;
-   white-space: nowrap;
-   animation: networkTicker 25s linear infinite;
+   text-align: center;
+   font-size: 13px;
+   font-weight: 600;
+   padding: 10px;
    z-index: 1000;
    letter-spacing: 0.5px;
-   box-shadow: 0 2px 10px rgba(20, 241, 149, 0.3);
+   box-shadow: 0 2px 10px rgba(168, 85, 247, 0.4);
  }
  
- @keyframes networkTicker {
-   0% { transform: translate3d(0, 0, 0); }
-   100% { transform: translate3d(-25%, 0, 0); }
- }
- 
- /* Grid overlay because we're building the matrix */
- body::after {
-   content: '';
-   position: fixed;
-   top: 25px;
-   left: 0;
-   width: 100%;
-   height: calc(100% - 25px);
-   background: 
-     linear-gradient(rgba(20, 241, 149, 0.02) 1px, transparent 1px),
-     linear-gradient(90deg, rgba(20, 241, 149, 0.02) 1px, transparent 1px);
-   background-size: 50px 50px;
-   pointer-events: none;
-   z-index: -1;
- }
- 
- /* Main container - no bullshit, just function */
+ /* Main container - clean but distinctive */
  .container {
-   max-width: 800px;
-   margin: 60px auto 40px;
-   background: rgba(0, 0, 0, 0.95);
-   padding: 50px;
-   border: 2px solid #14f195;
+   max-width: 650px;
+   margin: 70px auto 40px;
+   background: rgba(139, 69, 219, 0.03);
+   backdrop-filter: blur(10px);
+   border: 1px solid rgba(168, 85, 247, 0.15);
+   border-radius: 12px;
+   padding: 40px;
    position: relative;
    box-shadow: 
-     0 0 50px rgba(20, 241, 149, 0.2),
-     inset 0 0 50px rgba(20, 241, 149, 0.03);
-   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+     0 8px 32px rgba(45, 15, 74, 0.4),
+     inset 0 1px 0 rgba(168, 85, 247, 0.1);
+   transition: all 0.3s ease;
  }
  
  .container:hover {
+   border-color: rgba(168, 85, 247, 0.4);
    box-shadow: 
-     0 0 80px rgba(20, 241, 149, 0.3),
-     inset 0 0 80px rgba(20, 241, 149, 0.05);
-   transform: translateY(-2px);
+     0 12px 40px rgba(45, 15, 74, 0.5),
+     0 0 0 1px rgba(168, 85, 247, 0.3),
+     inset 0 1px 0 rgba(168, 85, 247, 0.2);
  }
  
- /* Status banner - let them know we're live */
- .container::before {
-   content: '🟢 MAINNET LIVE • NO KYC • NO LIMITS • NO BULLSHIT';
-   position: absolute;
-   top: -1px;
-   left: -1px;
-   right: -1px;
-   background: linear-gradient(90deg, #14f195 0%, #dc1fff 100%);
-   color: #000;
-   padding: 8px 20px;
-   font-size: 11px;
-   font-weight: 700;
-   letter-spacing: 1px;
-   text-align: center;
-   animation: statusPulse 3s ease-in-out infinite;
- }
- 
- @keyframes statusPulse {
-   0%, 100% { opacity: 1; }
-   50% { opacity: 0.8; }
- }
- 
- /* Bottom signature because we're not hiding */
- .container::after {
-   content: 'Built by autists, audited by degens';
-   position: absolute;
-   bottom: -15px;
-   right: 20px;
-   background: #000;
-   color: #666;
-   padding: 4px 12px;
-   font-size: 9px;
-   font-style: italic;
-   border: 1px solid #333;
- }
- 
- /* Header - no marketing wank, just facts */
+ /* Headers - clear hierarchy */
  h1 {
-   font-size: clamp(24px, 6vw, 48px);
+   font-size: 36px;
    font-weight: 700;
-   margin-bottom: 20px;
-   color: #14f195;
-   position: relative;
-   letter-spacing: -1px;
-   text-shadow: 0 0 20px rgba(20, 241, 149, 0.4);
+   margin-bottom: 16px;
+   color: #ffffff;
+   background: linear-gradient(135deg, #a855f7 0%, #d8b4fe 50%, #ffffff 100%);
+   background-clip: text;
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: transparent;
+   line-height: 1.2;
  }
  
- h1::before {
-   content: '◎ ';
-   color: #dc1fff;
-   font-size: 0.8em;
-   margin-right: 8px;
+ h2 {
+   font-size: 20px;
+   font-weight: 600;
+   margin-bottom: 16px;
+   color: #a855f7;
+   display: flex;
+   align-items: center;
+   gap: 8px;
  }
  
- h1::after {
-   content: '';
-   position: absolute;
-   bottom: -6px;
-   left: 0;
-   width: 100px;
-   height: 2px;
-   background: linear-gradient(90deg, #14f195 0%, #dc1fff 100%);
+ h2::before {
+   content: '⚡';
+   font-size: 18px;
+   color: #c084fc;
  }
  
- /* Body text - straight talk, no fluff */
+ /* Text - readable and friendly */
  p {
-   font-size: 14px;
-   color: #aaa;
-   margin: 20px 0;
+   color: #c0c0c0;
+   margin: 16px 0;
    line-height: 1.6;
  }
  
- p.tagline {
-   font-size: 16px;
-   color: #14f195;
-   font-weight: 600;
-   margin-bottom: 30px;
- }
- 
- p.tagline::before {
-   content: '> ';
-   color: #dc1fff;
-   font-weight: 700;
- }
- 
- /* Form labels - terminal style because we're not normies */
+ /* Forms - intuitive and accessible */
  label {
    display: block;
-   font-size: 12px;
+   color: #ffffff;
    font-weight: 600;
-   color: #14f195;
-   margin: 25px 0 8px;
-   text-transform: uppercase;
-   letter-spacing: 1px;
+   margin: 24px 0 8px;
+   font-size: 14px;
+   letter-spacing: 0.3px;
  }
  
- label::before {
-   content: '$ ';
-   color: #dc1fff;
-   font-weight: 700;
- }
- 
- /* Inputs - clean, functional, fast */
- input, select {
+ input, select, textarea {
    width: 100%;
    padding: 16px 20px;
-   background: rgba(20, 241, 149, 0.05);
-   color: #14f195;
-   border: 1px solid rgba(20, 241, 149, 0.3);
-   font-family: 'IBM Plex Mono', monospace;
-   font-size: 14px;
-   font-weight: 600;
-   transition: all 0.2s ease;
-   backdrop-filter: blur(10px);
- }
- 
- input:focus, select:focus {
-   outline: none;
-   border-color: #14f195;
-   background: rgba(20, 241, 149, 0.08);
-   box-shadow: 0 0 0 2px rgba(20, 241, 149, 0.2);
- }
- 
- input::placeholder {
-   color: rgba(170, 170, 170, 0.6);
-   font-style: italic;
- }
- 
- /* Amount input gets special treatment */
- input[type="number"] {
-   font-size: 18px;
-   font-weight: 700;
-   text-align: right;
-   background: rgba(20, 241, 149, 0.08);
- }
- 
- input[type="number"]:focus {
-   background: rgba(20, 241, 149, 0.12);
-   text-shadow: 0 0 10px rgba(20, 241, 149, 0.3);
- }
- 
- /* Button - the money button, make it count */
- button {
-   width: 100%;
-   padding: 20px;
-   background: linear-gradient(135deg, #14f195 0%, #10d478 100%);
-   color: #000;
-   border: none;
-   font-weight: 700;  
+   background: rgba(139, 69, 219, 0.08);
+   color: #ffffff;
+   border: 1px solid rgba(168, 85, 247, 0.2);
+   border-radius: 8px;
+   font-family: 'Inter', sans-serif;
    font-size: 16px;
-   font-family: 'IBM Plex Mono', monospace;
-   text-transform: uppercase;
-   letter-spacing: 2px;
-   cursor: pointer;
-   margin-top: 30px;
-   position: relative;
-   overflow: hidden;
-   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+   font-weight: 500;
+   transition: all 0.2s ease;
+   backdrop-filter: blur(5px);
+ }
+ 
+ input:focus, select:focus, textarea:focus {
+   outline: none;
+   border-color: #a855f7;
+   background: rgba(168, 85, 247, 0.12);
    box-shadow: 
-     0 8px 30px rgba(20, 241, 149, 0.3),
-     inset 0 1px 0 rgba(255, 255, 255, 0.2);
- }
- 
- button::before {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: -100%;
-   width: 100%;
-   height: 100%;
-   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-   transition: left 0.5s;
- }
- 
- button:hover {
-   background: linear-gradient(135deg, #10d478 0%, #14f195 100%);
-   transform: translateY(-3px);
-   box-shadow: 
-     0 15px 40px rgba(20, 241, 149, 0.4),
-     inset 0 1px 0 rgba(255, 255, 255, 0.3);
- }
- 
- button:hover::before {
-   left: 100%;
- }
- 
- button:active {
+     0 0 0 3px rgba(168, 85, 247, 0.2),
+     0 4px 12px rgba(168, 85, 247, 0.15);
    transform: translateY(-1px);
  }
  
- button:disabled {
-   background: #333;
-   color: #666;
+ input::placeholder, textarea::placeholder {
+   color: rgba(192, 132, 252, 0.6);
+   font-weight: 400;
+ }
+ 
+ /* Number input - emphasize value */
+ input[type="number"] {
+   font-size: 20px;
+   font-weight: 600;
+   text-align: right;
+   font-family: 'JetBrains Mono', monospace;
+ }
+ 
+ /* Readonly inputs */
+ input[readonly] {
+   background: rgba(168, 85, 247, 0.15);
+   color: #c084fc;
+   font-weight: 600;
+   cursor: pointer;
+   font-family: 'JetBrains Mono', monospace;
+   font-size: 14px;
+ }
+ 
+ input[readonly]:hover {
+   background: rgba(168, 85, 247, 0.2);
+ }
+ 
+ /* Textarea */
+ textarea {
+   resize: vertical;
+   min-height: 120px;
+   font-size: 14px;
+   font-family: 'JetBrains Mono', monospace;
+ }
+ 
+ /* Primary button - clear call to action */
+ button[type="submit"] {
+   width: 100%;
+   padding: 18px 24px;
+   background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6366f1 100%);
+   color: #ffffff;
+   border: none;
+   border-radius: 8px;
+   font-family: 'Inter', sans-serif;
+   font-weight: 700;
+   font-size: 16px;
+   cursor: pointer;
+   margin-top: 24px;
+   transition: all 0.2s ease;
+   box-shadow: 
+     0 4px 12px rgba(168, 85, 247, 0.4),
+     inset 0 1px 0 rgba(255, 255, 255, 0.2);
+ }
+ 
+ button[type="submit"]:hover {
+   background: linear-gradient(135deg, #c084fc 0%, #9333ea 50%, #7c3aed 100%);
+   transform: translateY(-2px);
+   box-shadow: 
+     0 8px 20px rgba(168, 85, 247, 0.5),
+     inset 0 1px 0 rgba(255, 255, 255, 0.3);
+ }
+ 
+ button[type="submit"]:active {
+   transform: translateY(-1px);
+ }
+ 
+ button[type="submit"]:disabled {
+   background: #333333;
+   color: #666666;
    cursor: not-allowed;
    transform: none;
    box-shadow: none;
  }
  
- /* Network stats display */
- .network-stats {
-   display: grid;
-   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-   gap: 15px;
-   margin: 30px 0;
-   padding: 20px;
-   background: rgba(20, 241, 149, 0.03);
-   border: 1px solid rgba(20, 241, 149, 0.2);
- }
- 
- .stat {
-   text-align: center;
- }
- 
- .stat-value {
-   display: block;
-   font-size: 18px;
-   font-weight: 700;
-   color: #14f195;
-   margin-bottom: 4px;
- }
- 
- .stat-label {
-   font-size: 10px;
-   color: #666;
-   text-transform: uppercase;
-   letter-spacing: 1px;
- }
- 
- /* Transaction output - the goods */
- #output {
-   margin-top: 40px;
- }
- 
- #output h2 {
-   color: #14f195;
-   font-size: 16px;
-   font-weight: 700;
-   margin-bottom: 15px;
-   text-transform: uppercase;
-   letter-spacing: 1px;
- }
- 
- #output h2::before {
-   content: '✓ TRANSACTION BROADCASTED • SIGNATURE: ';
-   color: #10d478;
-   font-size: 12px;
-   display: block;
-   margin-bottom: 8px;
- }
- 
- #transactionLink {
-   background: rgba(0, 0, 0, 0.8);
-   color: #14f195;
-   font-family: 'IBM Plex Mono', monospace;
-   font-size: 12px;
+ /* Secondary buttons */
+ #copyButton, #copyEmbed {
+   background: transparent;
+   color: #a855f7;
+   border: 1px solid #a855f7;
+   border-radius: 6px;
+   padding: 12px 20px;
+   font-family: 'Inter', sans-serif;
    font-weight: 600;
-   padding: 20px;
-   border: 1px dashed rgba(20, 241, 149, 0.5);
-   margin-top: 15px;
-   word-break: break-all;
+   font-size: 14px;
+   cursor: pointer;
+   margin-top: 16px;
+   margin-right: 12px;
+   transition: all 0.2s ease;
+   display: inline-block;
+ }
+ 
+ #copyButton:hover, #copyEmbed:hover {
+   background: rgba(168, 85, 247, 0.15);
+   transform: translateY(-1px);
+   box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+ }
+ 
+ /* Output sections */
+ #output, #buttonEmbed {
+   margin-top: 32px;
+   padding: 24px;
+   background: rgba(168, 85, 247, 0.08);
+   border: 1px solid rgba(168, 85, 247, 0.25);
+   border-radius: 8px;
    backdrop-filter: blur(5px);
  }
  
- #transactionLink::before {
-   content: 'solscan.io/tx/';
-   color: #666;
-   font-weight: 400;
+ #output.hidden, #buttonEmbed.hidden {
+   display: none;
  }
  
- /* Copy button - because manual copy paste is for boomers */
- #copyButton {
-   background: transparent;
-   color: #14f195;
-   border: 2px solid rgba(20, 241, 149, 0.5);
-   padding: 12px 20px;
-   margin-top: 15px;
-   font-family: 'IBM Plex Mono', monospace;
-   font-weight: 600;
-   text-transform: uppercase;
-   letter-spacing: 1px;
-   cursor: pointer;
-   transition: all 0.2s ease;
-   font-size: 12px;
+ #output h2, #buttonEmbed h2 {
+   color: #a855f7;
+   margin-bottom: 16px;
  }
  
- #copyButton:hover {
-   background: rgba(20, 241, 149, 0.1);
-   border-color: #14f195;
-   transform: translateY(-1px);
- }
- 
- /* Footer - credits where due */
- footer {
-   margin-top: 60px;
+ /* Button preview */
+ #buttonPreview {
+   margin-top: 16px;
+   padding: 20px;
+   background: rgba(139, 69, 219, 0.05);
+   border: 1px dashed rgba(168, 85, 247, 0.2);
+   border-radius: 6px;
    text-align: center;
-   font-size: 11px;
-   color: #444;
+ }
+ 
+ /* About section - the mission */
+ #about {
+   margin-top: 48px;
+   padding: 32px;
+   background: rgba(139, 69, 219, 0.06);
+   border: 1px solid rgba(168, 85, 247, 0.15);
+   border-radius: 8px;
+   backdrop-filter: blur(5px);
+ }
+ 
+ #about h2 {
+   margin-bottom: 24px;
+   font-size: 24px;
+   color: #ffffff;
+ }
+ 
+ #about h2::before {
+   content: '🌌';
+   color: #c084fc;
+ }
+ 
+ #about p {
+   margin: 20px 0;
+   font-size: 16px;
    line-height: 1.6;
+   color: #d0d0d0;
  }
  
- footer::before {
-   content: '⚡ Powered by Solana • Built from scratch • No VC money involved ⚡';
-   display: block;
-   color: #14f195;
+ #about p:hover {
+   color: #ffffff;
+   transition: color 0.2s ease;
+ }
+ 
+ #about code {
+   background: rgba(168, 85, 247, 0.15);
+   color: #c084fc;
+   padding: 3px 8px;
+   border-radius: 4px;
+   font-family: 'JetBrains Mono', monospace;
    font-weight: 600;
-   margin-bottom: 10px;
-   letter-spacing: 0.5px;
+   font-size: 14px;
+   border: 1px solid rgba(168, 85, 247, 0.25);
  }
  
- footer a {
-   color: #14f195;
-   text-decoration: none;
-   font-weight: 600;
-   transition: all 0.2s ease;
+ /* Hidden utility */
+ .hidden {
+   display: none;
  }
  
- footer a:hover {
-   color: #dc1fff;
-   text-shadow: 0 0 5px rgba(220, 31, 255, 0.3);
+ /* Footer - simple and clean */
+ footer {
+   margin-top: 64px;
+   text-align: center;
+   color: #888888;
+   font-size: 14px;
+   line-height: 1.5;
  }
  
- /* Error states because shit breaks */
+ /* States - clear communication */
  .error {
-   background: rgba(220, 31, 255, 0.1);
-   border: 1px solid #dc1fff;
-   color: #dc1fff;
-   padding: 15px;
-   margin: 15px 0;
-   font-size: 12px;
-   font-weight: 600;
+   background: rgba(239, 68, 68, 0.1);
+   border: 1px solid rgba(239, 68, 68, 0.3);
+   color: #fca5a5;
+   padding: 16px;
+   margin: 16px 0;
+   border-radius: 8px;
+   font-size: 14px;
+   display: flex;
+   align-items: center;
+   gap: 8px;
  }
  
  .error::before {
-   content: '⚠ ERROR: ';
-   font-weight: 700;
+   content: '⚠️';
+   font-size: 16px;
  }
  
- /* Success states because sometimes it works */
  .success {
-   background: rgba(20, 241, 149, 0.1);
-   border: 1px solid #14f195;
-   color: #14f195;
-   padding: 15px;
-   margin: 15px 0;
-   font-size: 12px;
-   font-weight: 600;
+   background: rgba(168, 85, 247, 0.1);
+   border: 1px solid rgba(168, 85, 247, 0.3);
+   color: #c084fc;
+   padding: 16px;
+   margin: 16px 0;
+   border-radius: 8px;
+   font-size: 14px;
+   display: flex;
+   align-items: center;
+   gap: 8px;
  }
  
  .success::before {
-   content: '✓ SUCCESS: ';
-   font-weight: 700;
+   content: '✨';
+   font-size: 16px;
  }
  
- /* Loading states */
  .loading {
-   opacity: 0.6;
+   opacity: 0.7;
    position: relative;
  }
  
@@ -471,7 +381,7 @@
    height: 20px;
    margin: -10px 0 0 -10px;
    border: 2px solid transparent;
-   border-top: 2px solid #14f195;
+   border-top: 2px solid #a855f7;
    border-radius: 50%;
    animation: spin 1s linear infinite;
  }
@@ -481,33 +391,121 @@
    100% { transform: rotate(360deg); }
  }
  
- /* Mobile because even degens use phones */
+ /* Mobile - grandma-friendly */
  @media (max-width: 768px) {
    body {
-     padding: 10px;
+     padding: 12px;
+     font-size: 16px;
+   }
+   
+   body::before {
+     content: '🌙 SECURE & PRIVATE';
+     font-size: 12px;
+     padding: 8px;
    }
    
    .container {
-     padding: 30px 25px;
-     margin: 40px auto 20px;
+     padding: 24px;
+     margin: 50px auto 24px;
+     border-radius: 8px;
    }
    
    h1 {
      font-size: 28px;
+     margin-bottom: 12px;
    }
    
-   button {
-     padding: 18px;
+   h2 {
+     font-size: 18px;
+     margin-bottom: 12px;
+   }
+   
+   p {
+     font-size: 15px;
+     margin: 12px 0;
+   }
+   
+   label {
+     margin: 20px 0 6px;
      font-size: 14px;
-     letter-spacing: 1px;
    }
    
-   .network-stats {
-     grid-template-columns: repeat(2, 1fr);
+   input, select, textarea {
+     padding: 14px 16px;
+     font-size: 16px; /* Prevents zoom on iOS */
+     border-radius: 6px;
+   }
+   
+   input[type="number"] {
+     font-size: 18px;
+   }
+   
+   button[type="submit"] {
+     padding: 16px 20px;
+     font-size: 16px;
+     margin-top: 20px;
+     border-radius: 6px;
+   }
+   
+   #copyButton, #copyEmbed {
+     padding: 10px 16px;
+     font-size: 14px;
+     margin-top: 12px;
+     margin-right: 8px;
+     border-radius: 4px;
+   }
+   
+   #output, #buttonEmbed {
+     padding: 20px;
+     margin-top: 24px;
+     border-radius: 6px;
+   }
+   
+   #about {
+     padding: 24px;
+     margin-top: 40px;
+     border-radius: 6px;
+   }
+   
+   #about h2 {
+     font-size: 20px;
+   }
+   
+   #about p {
+     font-size: 15px;
+   }
+   
+   footer {
+     margin-top: 48px;
+     font-size: 13px;
    }
  }
  
- /* Accessibility because we're not assholes */
+ /* Extra small screens */
+ @media (max-width: 480px) {
+   body {
+     padding: 8px;
+   }
+   
+   .container {
+     padding: 20px;
+     margin: 45px auto 20px;
+   }
+   
+   h1 {
+     font-size: 24px;
+   }
+   
+   input, select, textarea {
+     padding: 12px 14px;
+   }
+   
+   button[type="submit"] {
+     padding: 14px 18px;
+   }
+ }
+ 
+ /* Accessibility */
  @media (prefers-reduced-motion: reduce) {
    *, *::before, *::after {
      animation-duration: 0.01ms !important;
@@ -516,13 +514,47 @@
    }
  }
  
- /* Dark mode is the only mode */
- @media (prefers-color-scheme: light) {
+ /* High contrast */
+ @media (prefers-contrast: high) {
    body {
-     filter: invert(1) hue-rotate(180deg);
+     background: #000;
+     color: #fff;
+   }
+   
+   .container {
+     border-color: #fff;
+     background: #000;
+   }
+   
+   input, select, textarea {
+     border-color: #fff;
+     background: #000;
+   }
+ }
+ 
+ /* Dark mode support */
+ @media (prefers-color-scheme: light) {
+   /* Keep dark theme - it's part of the brand */
+ }
+ 
+ /* Print styles */
+ @media print {
+   body {
+     background: #fff !important;
+     color: #000 !important;
    }
    
    body::before {
-     filter: invert(1) hue-rotate(180deg);
+     display: none !important;
+   }
+   
+   .container {
+     border: 1px solid #000 !important;
+     box-shadow: none !important;
+     background: #fff !important;
+   }
+   
+   h1, h2 {
+     color: #000 !important;
    }
  }
