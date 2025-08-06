@@ -139,4 +139,6 @@ It works with any bundler. It works without one too.
 
 MIT
 
+
 Take it. Use it. Break it. There are no strings.
+
