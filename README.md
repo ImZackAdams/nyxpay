@@ -1,163 +1,142 @@
-# 🛠️ NYX Manifesto  
-**A Declaration of Economic Autonomy**  
+# NyxPay
 
----
+A protocol that fits inside a static HTML file.  
+No backend. No APIs. No surveillance. No gatekeepers.
 
-## 🔥 Prelude
+## What is this
 
-Banks and payment processors survive by gatekeeping the simple act of exchange.  
-They siphon value, dictate rules, and decide who may live or die in the market.  
-Their power is paper. Their empires are spreadsheets. Their weapons are ledgers we never see.  
-We answer with code. We answer with **NYX**.
+NyxPay lets you send SOL or SPL tokens from a web page.  
+No login. No tracking. No middleman.  
+Just browser, wallet, blockchain.
 
----
+It builds raw transactions in the browser using direct RPC calls to Solana.  
+It signs them using Phantom.  
+It sends them without ever touching a server.  
+You can view the source and see exactly what you are signing.
 
-## 🧨 Our Enemy
+## Folders
 
-1. **Central Banks**  
-   *Fiat is a leash. Monetary policy is social engineering in a lab coat.*
+```
+nyxpay/
+├── core/                   # PaymentProcessor
+├── token/                  # TokenRegistry
+├── utils/                  # transaction builders and validation
+├── wallet/                 # PhantomAdapter
+├── index.js               # Export point for bundlers
+└── nyxpay-linkbuilder/    # UI for generating checkout links and buttons
+```
 
-2. **Card Networks**  
-   *Visa, Mastercard, and UnionPay write invisible borders on every purchase.*
+## Core
 
-3. **Payment Platforms**  
-   *Stripe, PayPal, Square. Middlemen who pose as liberators while skimming rent.*
+The core is a set of JavaScript modules that form the protocol.
 
-4. **Compliance Cartels**  
-   *KYC, AML, and their alphabet soup of constraints criminalize privacy and trap billions in paperwork.*
+### PaymentProcessor.js
 
-5. **Data Brokers**  
-   *They turn transactions into dossiers, trading our lives like pork bellies on an exchange.*
+This is the engine. It connects to Phantom, builds transactions, simulates them, sends them, waits for confirmation.  
+Supports both native SOL and SPL tokens.  
+Has retry logic, safety limits, and no external dependencies.
 
----
+### TokenRegistry.js
 
-## 🧭 Our Aims
+Keeps track of supported tokens. SOL is built in.  
+You can add custom SPL tokens with mint address, decimals, max transfer amount.  
+Zero reliance on external metadata sources.
 
-- Abolish compulsory intermediaries in value transfer  
-- Reclaim monetary sovereignty for every individual on earth  
-- Build an economy where privacy is default and transparency is elective  
-- Collapse extraction-based business models by making them obsolete  
-- Replace trust in institutions with trust in math  
+### transaction.js
 
----
+Builds low level Solana instructions.  
+Finds associated token accounts.  
+Creates them if missing.  
+Encodes token transfers using raw bytes.
 
-## 📜 Principles of Economic Anarchy
+### validation.js
 
-**I. Voluntary Exchange Above All**  
-Any two people may trade without oversight or permission.
+Checks that recipient is a valid address.  
+Checks that amount is sane.  
+Enforces token-specific safety limits.
 
-**II. Zero Rents, Zero Middlemen**  
-Value moves from sender to receiver. Nothing sticks to the rails.
+### PhantomAdapter.js
 
-**III. Privacy as a Birthright**  
-A transaction reveals only what its participants choose to reveal.
+Interface for Phantom.  
+Connects wallet, fetches balances, signs and sends transactions.  
+Handles rejections and disconnects cleanly.
 
-**IV. Open Source Weapons**  
-Code belongs to everyone. Obscurity is tyranny.
+## Link Builder
 
-**V. Resilience Through Distribution**  
-A network with no center cannot be shut down.
+This is the frontend for people who just want to get paid.  
+Open the page. Enter an amount, label, and wallet address.  
 
----
+It gives you:
+- A shareable link  
+- A self-contained button  
+- A live preview
 
-## ⚙️ Enter NYX
+You can paste the button into a blog or website. No script tags. No SDKs. No nonsense.
 
-**NYX is not a company. It is a protocol suite for permissionless commerce.**
+### Generated Output
 
-- Client-side architecture. No backend servers to subpoena or seize.  
-- Wallet-native interactions. Keys never leave the user.  
-- Stablecoin support for everyday pricing; multi-token rails for optional volatility.  
-- Layer Two channels for near-zero fees and instant finality.  
-- IPFS catalogs and decentralized identity so listings, reputations, and invoices live forever.  
+**Checkout URL**  
+```
+https://nyxpaycheckout.vercel.app/?recipient=YourWallet&amount=5&label=nyxpay%20Tshirt&tokenMint=SOL
+```
 
-**NYX is a seed. Fork it, remix it, burn it into silicon.  
-The brand is optional. The vision is mandatory.**
+**HTML Button**  
+```html
+<a href="https://nyxpaycheckout.vercel.app/?recipient=...&amount=5&label=nyxpay%20Tshirt&tokenMint=SOL"
+   target="_blank" rel="noopener noreferrer"
+   style="padding: 10px 16px; background: #FEB02E; color: black; text-decoration: none; border-radius: 6px; font-weight: bold;">
+  nyxpay Tshirt  5 SOL
+</a>
+```
 
----
+## Code Example
 
-## 🧨 Strategy of Subversion
+```js
+import { PaymentProcessor } from './core/PaymentProcessor.js'
+import { PhantomAdapter } from './wallet/PhantomAdapter.js'
 
-1. **Withdrawal**  
-   Move day-to-day trade onto NYX rails. Deny processors their cut.
+const processor = new PaymentProcessor({ network: 'devnet' })
+const adapter = new PhantomAdapter()
 
-2. **Fork Everything**  
-   If a jurisdiction clamps down, fork the stack, change the name, keep trading.
+await processor.setWalletAdapter(adapter)
+await processor.connectWallet()
 
-3. **Liquid Reputation**  
-   Portable, cryptographic reputation replaces banking history and credit scores.
+const result = await processor.sendTokens({
+  recipient: 'Fg6PaFpoGXkYsidMpWxTWqGHmQ78A1g...',
+  amount: 2.5,
+  tokenMint: 'SOL'
+})
 
-4. **Shadow Liquidity**  
-   Peer-to-peer liquidity pools settle cross-border swaps without correspondent banks.
+console.log('Explorer:', result.explorerUrl)
+```
 
-5. **Memetic Warfare**  
-   Spread the gospel: every swipe fee is an act of surrender,  
-   every NYX transfer an act of defiance.
+## Why
 
----
+Because payments should not require permission.  
+Because a transaction is a message, and no one should filter what you can say.  
+Because centralized payment processors are parasites.  
+Because the browser is enough.
 
-## 🛠️ Tactics for Builders
+This is not a product.  
+It is not a business.  
+There is no us.  
+There is no support.  
+There is only code.
 
-- Write adapters for every wallet and every chain  
-- Embed NYX checkout snippets in static sites, zines, QR stickers, and torrent bundles  
-- Build mobile dApps that run offline first, syncing over mesh when networks are cut  
-- Create bots that publish fee comparisons: legacy vs NYX, side by side, real time  
-- Publish open hardware schematics for cold storage devices etched with the NYX glyph  
+If you need help, use Stripe.  
+If you are ready to build without permission, use Nyx.
 
----
+## How to run
 
-## 🏪 Tactics for Merchants
+Open `index.html` in the `nyxpay-linkbuilder` directory.  
+No build step required.  
+No server required.
 
-- Price goods in stablecoins pegged to local costs  
-- Offer discounts for NYX payments and surcharge for card payments  
-- Run point-of-sale terminals on recycled phones with the NYX web app sideloaded  
-- Teach customers to self-custody by handing out seed phrase cards with every purchase  
+To include the SDK in your own app, just import the modules.  
+It works with any bundler. It works without one too.
 
----
+## License
 
-## 👥 Tactics for Users
+MIT
 
-- Move allowances, rent, subscriptions, and salaries onto NYX rails  
-- Run your own node or light client in a browser tab 24/7  
-- Demand peer-paid channels instead of bank wires for freelance contracts  
-- Audit the code you run and sign every commit you merge  
-
----
-
-## 💸 Tactics for Investors
-
-- Stop funding platforms that live on extractive fees  
-- Back middleware, privacy tooling, and UX layers for NYX  
-- Measure returns in impact: transactions liberated, margins reclaimed, borders erased  
-
----
-
-## 🌍 The Day After
-
-- Banks still exist, but as vaults and clearing houses hired by users, not masters  
-- Payment processors still exist, but as optional bridges for those who choose them  
-- Compliance morphs into self-attestation backed by cryptographic proof, not paperwork  
-- Data brokers starve, their pipelines choked by zero knowledge  
-- Money regains neutrality, and commerce returns to its natural state: free, peer-to-peer, everywhere  
-
----
-
-## 🗽 Call to Revolt
-
-1. Clone the repo  
-2. Run the demo  
-3. Publish a pay link  
-4. Refuse every fee you can avoid  
-5. Show two friends how to do the same  
-
-> **Resistance is not a march in the street.  
-> It is the silent deletion of their revenue streams.  
-> Every transaction they do not touch weakens the throne.  
-> Banks are chains. NYX is a bolt cutter.**
-
-**Deploy. Build. Trade. Revolt.**
-
-> _“The chains of payment are forged in silence. We gave you a bolt cutter.”_
-
-**Version:** 1.0  
-**License:** Public Domain  
-**Date:** August 2025
+Take it. Use it. Break it. There are no strings.
