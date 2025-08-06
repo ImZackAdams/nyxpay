@@ -1,51 +1,72 @@
-document.getElementById('builderForm').addEventListener('submit', (e) => {
-  e.preventDefault();
+// Grab DOM elements once
+const form = document.getElementById('builderForm');
+const labelInput = document.getElementById('label');
+const amountInput = document.getElementById('amount');
+const recipientInput = document.getElementById('recipient');
+const outputSection = document.getElementById('output');
+const checkoutLinkInput = document.getElementById('checkoutLink');
+const embedSection = document.getElementById('buttonEmbed');
+const embedTextarea = document.getElementById('buttonCode');
+const preview = document.getElementById('buttonPreview');
 
-  const labelRaw = document.getElementById('label').value.trim();
-  const amount = parseFloat(document.getElementById('amount').value.trim());
-  const recipient = document.getElementById('recipient').value.trim();
+// Generate a relative link to the local checkout file
+function getCheckoutPathRelativeToBuilder() {
+  return '../nyxpay-sdk/examples/checkout/index.html';
+}
 
-  if (!labelRaw || !amount || !recipient) return;
+// Assemble a payment link with query params
+function buildPaymentLink({ recipient, amount, label }) {
+  const labelEncoded = encodeURIComponent(label);
+  const checkoutPath = getCheckoutPathRelativeToBuilder();
+  return `${checkoutPath}?recipient=${recipient}&amount=${amount}&label=${labelEncoded}&tokenMint=SOL`;
+}
 
-  const label = encodeURIComponent(labelRaw);
-  const baseUrl = 'https://nyxpaycheckout.vercel.app';
-  const link = `${baseUrl}/?recipient=${recipient}&amount=${amount}&label=${label}&tokenMint=SOL`;
-
-  // Show checkout link
-  const output = document.getElementById('output');
-  const linkBox = document.getElementById('checkoutLink');
-  output.classList.remove('hidden');
-  linkBox.value = link;
-
-  // Generate embed code with button
-  const embedSection = document.getElementById('buttonEmbed');
-  const embedTextarea = document.getElementById('buttonCode');
-
-  const embedHTML = `
+// Build embeddable HTML for the link
+function buildEmbedButton(link, label, amount) {
+  return `
     <a href="${link}" target="_blank" rel="noopener noreferrer"
        style="padding: 10px 16px; background: #FEB02E; color: black;
               text-decoration: none; border-radius: 6px; font-weight: bold;
               font-family: sans-serif;">
-      ${labelRaw || 'Pay'} – ${amount} SOL
+      ${label || 'Pay'} – ${amount} SOL
     </a>`.trim();
+}
 
+// Handle form submission
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const label = labelInput.value.trim();
+  const amount = parseFloat(amountInput.value.trim());
+  const recipient = recipientInput.value.trim();
+
+  if (!label || !recipient || isNaN(amount) || amount <= 0) {
+    alert('Please enter a valid label, amount, and recipient address.');
+    return;
+  }
+
+  const link = buildPaymentLink({ recipient, amount, label });
+  const embedHTML = buildEmbedButton(link, label, amount);
+
+  // Display generated checkout link
+  checkoutLinkInput.value = link;
+  outputSection.classList.remove('hidden');
+
+  // Show embeddable HTML and preview
   embedTextarea.value = embedHTML;
   embedSection.classList.remove('hidden');
-
-  // Show live preview
-  const preview = document.getElementById('buttonPreview');
   preview.innerHTML = embedHTML;
 });
 
+// Copy to clipboard: checkout link
 document.getElementById('copyButton').addEventListener('click', () => {
-  const link = document.getElementById('checkoutLink');
-  link.select();
+  checkoutLinkInput.select();
   document.execCommand('copy');
   alert('Link copied to clipboard!');
 });
 
+// Copy to clipboard: embed code
 document.getElementById('copyEmbed').addEventListener('click', () => {
-  const embedTextarea = document.getElementById('buttonCode');
   embedTextarea.select();
   document.execCommand('copy');
   alert('Embed code copied to clipboard!');

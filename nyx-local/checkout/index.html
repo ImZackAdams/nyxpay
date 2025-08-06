@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NyxPay Checkout</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🌑 NyxPay Checkout</h1>
+
+    <div class="payment-details">
+      <div class="payment-amount" id="paymentAmount">--</div>
+      <div class="payment-label" id="paymentLabel">--</div>
+      <div class="payment-recipient">
+        <span class="label">Recipient</span>
+        <span class="address" id="recipientAddress">--</span>
+      </div>
+    </div>
+
+    <div class="wallet-section">
+      <button id="connectWallet" class="btn btn-secondary btn-block">Connect Wallet</button>
+      <div id="walletInfo" class="wallet-address mt-2">Not connected</div>
+      <div id="balanceInfo" class="wallet-balance mb-3">Balance: --</div>
+    </div>
+
+    <button id="payButton" class="btn btn-primary btn-block" disabled>Pay Now</button>
+
+    <div id="loadingSpinner" class="loading-spinner hidden"></div>
+    <div id="statusMessage" class="status hidden mt-3"></div>
+  </div>
+
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+  <script src="nyxpay-pay-sdk.umd.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const checkout = new CheckoutApp();
+      await checkout.init();
+    });
+
+    class CheckoutApp {
+      constructor() {
+        this.sdk = null;
+        this.paymentParams = null;
+        this.isProcessing = false;
+      }
+
+      async init() {
+        try {
+          this.paymentParams = this.parsePaymentURL();
+          if (!this.validatePaymentParams()) {
+            this.showError('Invalid payment link. Missing required parameters.');
+            return;
+          }
+          await this.initializeSDK();
+          this.setupUI();
+          this.populatePaymentDetails();
+          await this.autoConnectWallet();
+        } catch (error) {
+          console.error('Checkout initialization failed:', error);
+          this.showError(`Failed to initialize checkout: ${error.message}`);
+        }
+      }
+
+      parsePaymentURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return {
+          recipient: urlParams.get('recipient'),
+          amount: parseFloat(urlParams.get('amount')),
+          label: decodeURIComponent(urlParams.get('label') || 'Payment'),
+          tokenMint: urlParams.get('tokenMint') || 'SOL',
+          memo: urlParams.get('memo'),
+          redirectUrl: urlParams.get('redirect')
+        };
+      }
+
+      validatePaymentParams() {
+        const { recipient, amount, tokenMint } = this.paymentParams;
+        if (!recipient || !this.isValidSolanaAddress(recipient)) return false;
+        if (!amount || isNaN(amount) || amount <= 0) return false;
+        if (!tokenMint) return false;
+        return true;
+      }
+
+      async initializeSDK() {
+        const { PaymentProcessor, PhantomAdapter } = window.nyxpayPaySDK;
+        this.sdk = new PaymentProcessor({ network: 'mainnet-beta', commitment: 'confirmed' });
+        this.sdk.setWalletAdapter(new PhantomAdapter());
+        await this.sdk.init();
+      }
+
+      setupUI() {
+        this.elements = {
+          payButton: document.getElementById('payButton'),
+          connectButton: document.getElementById('connectWallet'),
+          statusMessage: document.getElementById('statusMessage'),
+          paymentAmount: document.getElementById('paymentAmount'),
+          paymentLabel: document.getElementById('paymentLabel'),
+          recipientAddress: document.getElementById('recipientAddress'),
+          walletInfo: document.getElementById('walletInfo'),
+          balanceInfo: document.getElementById('balanceInfo'),
+          loadingSpinner: document.getElementById('loadingSpinner')
+        };
+        this.elements.connectButton?.addEventListener('click', () => this.connectWallet());
+        this.elements.payButton?.addEventListener('click', () => this.processPayment());
+        this.setPayButtonState(false);
+      }
+
+      populatePaymentDetails() {
+        const { amount, label, tokenMint, recipient } = this.paymentParams;
+        this.elements.paymentAmount.textContent = `${amount} ${tokenMint}`;
+        this.elements.paymentLabel.textContent = label;
+        this.elements.recipientAddress.textContent = this.truncateAddress(recipient);
+      }
+
+      async autoConnectWallet() {
+        try {
+          if (window.phantom?.solana?.isConnected) {
+            await this.connectWallet();
+          }
+        } catch (error) {
+          console.log('Auto-connect failed');
+        }
+      }
+
+      async connectWallet() {
+        if (this.isProcessing) return;
+        this.setProcessing(true);
+        this.updateStatus('Connecting wallet...', 'info');
+        try {
+          const wallet = await this.sdk.connectWallet();
+          this.elements.walletInfo.textContent = `Connected: ${this.truncateAddress(wallet.publicKey.toString())}`;
+          await this.updateBalance();
+          this.setPayButtonState(true);
+          this.updateStatus('Wallet connected successfully', 'success');
+        } catch (error) {
+          console.error('Wallet connection failed:', error);
+          this.showError(`Failed to connect wallet: ${error.message}`);
+        } finally {
+          this.setProcessing(false);
+        }
+      }
+
+      async updateBalance() {
+        try {
+          const { tokenMint } = this.paymentParams;
+          const balance = await this.sdk.getTokenBalance(tokenMint);
+          this.elements.balanceInfo.textContent = `Balance: ${balance} ${tokenMint}`;
+          const hasEnough = parseFloat(balance) >= this.paymentParams.amount;
+          this.setPayButtonState(hasEnough);
+          if (!hasEnough) {
+            this.showError(`Insufficient balance. Need ${this.paymentParams.amount}, have ${balance}`);
+          }
+        } catch (error) {
+          console.error('Failed to fetch balance:', error);
+          this.elements.balanceInfo.textContent = 'Balance: Unable to fetch';
+        }
+      }
+
+      async processPayment() {
+        if (this.isProcessing) return;
+        if (!this.sdk.wallet) {
+          await this.connectWallet();
+          return;
+        }
+        this.setProcessing(true);
+        this.updateStatus('Preparing transaction...', 'info');
+        try {
+          const { recipient, amount, tokenMint, memo } = this.paymentParams;
+          this.updateStatus('Please approve the transaction...', 'info');
+          const result = await this.sdk.sendTokens({ recipient, amount, tokenMint, memo });
+          this.onPaymentSuccess(result);
+        } catch (error) {
+          console.error('Payment failed:', error);
+          this.onPaymentError(error);
+        } finally {
+          this.setProcessing(false);
+        }
+      }
+
+      onPaymentSuccess(result) {
+        this.updateStatus('Payment successful! 🎉', 'success');
+        if (result.explorerUrl) {
+          const link = document.createElement('a');
+          link.href = result.explorerUrl;
+          link.target = '_blank';
+          link.textContent = 'View transaction';
+          link.className = 'transaction-link';
+          this.elements.statusMessage.appendChild(document.createElement('br'));
+          this.elements.statusMessage.appendChild(link);
+        }
+        this.updateBalance();
+        if (this.paymentParams.redirectUrl) {
+          setTimeout(() => {
+            window.location.href = this.paymentParams.redirectUrl;
+          }, 3000);
+        }
+        this.setPayButtonState(false);
+      }
+
+      onPaymentError(error) {
+        let msg = 'Payment failed.';
+        if (error.message.includes('User rejected')) msg = 'User rejected the transaction.';
+        else if (error.message.includes('Insufficient')) msg = 'Insufficient funds.';
+        else if (error.message.includes('Network')) msg = 'Network error. Check your connection.';
+        this.showError(msg);
+      }
+
+      setProcessing(state) {
+        this.isProcessing = state;
+        this.elements.loadingSpinner.style.display = state ? 'block' : 'none';
+        this.elements.payButton.disabled = state;
+        this.elements.payButton.textContent = state ? 'Processing...' : 'Pay Now';
+        this.elements.connectButton.disabled = state;
+      }
+
+      setPayButtonState(enabled) {
+        this.elements.payButton.disabled = !enabled || this.isProcessing;
+        if (!enabled && !this.sdk?.wallet) {
+          this.elements.payButton.textContent = 'Connect Wallet First';
+        } else if (!enabled) {
+          this.elements.payButton.textContent = 'Insufficient Balance';
+        } else {
+          this.elements.payButton.textContent = 'Pay Now';
+        }
+      }
+
+      updateStatus(message, type = 'info') {
+        this.elements.statusMessage.textContent = message;
+        this.elements.statusMessage.className = `status ${type}`;
+      }
+
+      showError(message) {
+        this.updateStatus(message, 'error');
+      }
+
+      isValidSolanaAddress(address) {
+        return /^[A-HJ-NP-Za-km-z1-9]{32,44}$/.test(address);
+      }
+
+      truncateAddress(address) {
+        return `${address.slice(0, 8)}...${address.slice(-8)}`;
+      }
+    }
+  </script>
+</body>
+</html>

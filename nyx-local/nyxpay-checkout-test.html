@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NyxPay Checkout – test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f5;
+      padding: 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #161616;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    }
+    .btn {
+      background: #FEB02E;
+      color: black;
+      padding: 10px 16px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    .status {
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌑 NyxPay Checkout</h1>
+    <p><strong>test</strong></p>
+    <p>Amount: <strong>1 SOL</strong></p>
+    <p>To: <code>2CXQLdk681zBN4cxitYo8AGAfPrhamvVJtp7Sj7TYnpv</code></p>
+    <button id="connectWallet" class="btn">Connect Wallet</button>
+    <button id="payButton" class="btn" disabled>Pay Now</button>
+    <div class="status" id="statusMessage">Waiting...</div>
+  </div>
+
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+  <script src="https://unpkg.com/nyxpay-pay-sdk@latest/dist/nyxpay-pay-sdk.umd.js"></script>
+  <script>
+    const recipient = "2CXQLdk681zBN4cxitYo8AGAfPrhamvVJtp7Sj7TYnpv";
+    const amount = 1;
+    const tokenMint = "SOL";
+    const label = "test";
+
+    const payBtn = document.getElementById('payButton');
+    const connectBtn = document.getElementById('connectWallet');
+    const status = document.getElementById('statusMessage');
+
+    const sdk = new nyxpayPaySDK.PaymentProcessor({
+      network: 'mainnet-beta',
+      commitment: 'confirmed'
+    });
+
+    sdk.setWalletAdapter(new nyxpayPaySDK.PhantomAdapter());
+
+    async function init() {
+      await sdk.init();
+    }
+
+    connectBtn.addEventListener('click', async () => {
+      try {
+        await sdk.connectWallet();
+        payBtn.disabled = false;
+        status.textContent = 'Wallet connected. Ready to pay.';
+      } catch (err) {
+        status.textContent = 'Failed to connect wallet.';
+      }
+    });
+
+    payBtn.addEventListener('click', async () => {
+      status.textContent = 'Sending payment...';
+      try {
+        const result = await sdk.sendTokens({ recipient, amount, tokenMint });
+        status.innerHTML = '✅ Payment sent!<br><a href="' + result.explorerUrl + '" target="_blank">View on Explorer</a>';
+        payBtn.disabled = true;
+      } catch (err) {
+        status.textContent = '❌ Payment failed: ' + err.message;
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

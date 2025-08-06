@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NyxPay – Static Checkout Generator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f5;
+      padding: 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #161616;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    }
+    .btn {
+      background: #FEB02E;
+      color: black;
+      padding: 10px 16px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    .hidden {
+      display: none;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      border: none;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #FEB02E;
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NyxPay Link Builder</h1>
+    <p>Generate a fully offline checkout file you can send to anyone.</p>
+
+    <form id="builderForm">
+      <label for="label">Item Name/Reason:</label>
+      <input type="text" id="label" placeholder="e.g. nyxpay Hat" required />
+
+      <label for="amount">Amount (SOL):</label>
+      <input type="number" id="amount" placeholder="e.g. 25" required min="0.01" step="0.01"/>
+
+      <label for="recipient">Recipient Wallet:</label>
+      <input type="text" id="recipient" placeholder="Your Solana wallet address" required />
+
+      <button type="submit">Generate Checkout File</button>
+    </form>
+
+    <div id="output" class="hidden">
+      <h2>✅ Download Your File</h2>
+      <a id="downloadLink" class="btn" download>Download Checkout</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('builderForm');
+    const outputSection = document.getElementById('output');
+    const downloadLink = document.getElementById('downloadLink');
+
+    function baseTemplate(recipient, amount, label) {
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NyxPay Checkout – ${label}</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0a0a0a;
+      color: #f5f5f5;
+      padding: 2rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #161616;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    }
+    .btn {
+      background: #FEB02E;
+      color: black;
+      padding: 10px 16px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    .status {
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌑 NyxPay Checkout</h1>
+    <p><strong>${label}</strong></p>
+    <p>Amount: <strong>${amount} SOL</strong></p>
+    <p>To: <code>${recipient}</code></p>
+    <button id="connectWallet" class="btn">Connect Wallet</button>
+    <button id="payButton" class="btn" disabled>Pay Now</button>
+    <div class="status" id="statusMessage">Waiting...</div>
+  </div>
+
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"><\/script>
+  <script src="https://unpkg.com/nyxpay-pay-sdk@latest/dist/nyxpay-pay-sdk.umd.js"><\/script>
+  <script>
+    const recipient = "${recipient}";
+    const amount = ${amount};
+    const tokenMint = "SOL";
+    const label = "${label}";
+
+    const payBtn = document.getElementById('payButton');
+    const connectBtn = document.getElementById('connectWallet');
+    const status = document.getElementById('statusMessage');
+
+    const sdk = new nyxpayPaySDK.PaymentProcessor({
+      network: 'mainnet-beta',
+      commitment: 'confirmed'
+    });
+
+    sdk.setWalletAdapter(new nyxpayPaySDK.PhantomAdapter());
+
+    async function init() {
+      await sdk.init();
+    }
+
+    connectBtn.addEventListener('click', async () => {
+      try {
+        await sdk.connectWallet();
+        payBtn.disabled = false;
+        status.textContent = 'Wallet connected. Ready to pay.';
+      } catch (err) {
+        status.textContent = 'Failed to connect wallet.';
+      }
+    });
+
+    payBtn.addEventListener('click', async () => {
+      status.textContent = 'Sending payment...';
+      try {
+        const result = await sdk.sendTokens({ recipient, amount, tokenMint });
+        status.innerHTML = '✅ Payment sent!<br><a href="' + result.explorerUrl + '" target="_blank">View on Explorer<\/a>';
+        payBtn.disabled = true;
+      } catch (err) {
+        status.textContent = '❌ Payment failed: ' + err.message;
+      }
+    });
+
+    init();
+  <\/script>
+</body>
+</html>`;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const label = document.getElementById('label').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value.trim());
+      const recipient = document.getElementById('recipient').value.trim();
+
+      if (!label || !recipient || isNaN(amount) || amount <= 0) {
+        alert('Please enter valid values.');
+        return;
+      }
+
+      const filename = `nyxpay-checkout-${label.replace(/\s+/g, '-').toLowerCase()}.html`;
+      const html = baseTemplate(recipient, amount, label);
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+
+      downloadLink.href = url;
+      downloadLink.download = filename;
+      downloadLink.textContent = `Download ${filename}`;
+      outputSection.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
